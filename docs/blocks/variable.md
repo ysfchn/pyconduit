@@ -1,0 +1,1 @@
+::: pyconduit.categories.variable.Variable

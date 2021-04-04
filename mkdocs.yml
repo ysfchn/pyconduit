@@ -1,0 +1,81 @@
+site_name: pyconduit
+nav:
+  - Home: index.md
+  - Quick Start: quick_start.md
+  - Defining Blocks: defining_blocks.md
+  - Context Values: context_values.md
+  - Locals, Variables & Globals: locals_variables_globals.md
+  - Running Job: running_job.md
+  - Blocks:
+    - Dictionary: blocks/dictionary.md
+    - List: blocks/list.md
+    - Logic: blocks/logic.md
+    - Math: blocks/math.md
+    - Object: blocks/object.md
+    - Text: blocks/text.md
+    - Variable: blocks/variable.md
+  - API Documentation:
+    - Conduit: api/conduit.md
+    - ConduitStep: api/step.md
+    - ConduitBlock: api/block.md
+    - ConduitCategory: api/category.md
+    - ConduitPartialBlock: api/partial_block.md
+    - Extras:
+      - Utils: api/extras/utils.md
+      - ScopedObject: api/extras/scoped_object.md
+  - License: https://github.com/ysfchn/pyconduit/blob/main/LICENSE.md
+
+theme: 
+  name: material
+  features:
+    - navigation.indexes
+    - navigation.instant
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+
+plugins:
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          selection:
+            inherited_members: true
+            filters:
+              - "!^_[^_]"
+              # - "!__init__"
+          rendering:
+            show_root_heading: true
+            heading_level: 1
+            show_root_toc_entry: true
+            show_root_full_path: false
+            show_source: false
+  - autorefs
+
+repo_url: https://github.com/ysfchn/pyconduit
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - abbr
+  - pymdownx.inlinehilite
+  - pymdownx.highlight
+  - meta
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - pymdownx.tabbed
+  - toc:
+      permalink: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ysfchn/pyconduit

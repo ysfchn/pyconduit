@@ -1,0 +1,1 @@
+::: pyconduit.block.ConduitPartialBlock

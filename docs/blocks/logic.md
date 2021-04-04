@@ -1,0 +1,1 @@
+::: pyconduit.categories.logic.Logic

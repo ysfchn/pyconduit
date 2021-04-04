@@ -1,0 +1,1 @@
+::: pyconduit.categories.dictionary.Dictionary

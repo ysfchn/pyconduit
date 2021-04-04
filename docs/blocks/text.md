@@ -1,0 +1,1 @@
+::: pyconduit.categories.text.Text

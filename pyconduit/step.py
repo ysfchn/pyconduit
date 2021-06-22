@@ -111,10 +111,10 @@ class ConduitStep:
         self.forced : bool = forced
         self.block : Union[ConduitBlock, ConduitBlock._Partial] = block
         self.status : ConduitStatus = ConduitStatus.NONE
-        self.refresh_status()
         self.return_value : Any = None
         self.parameters : Dict[str, Any] = parameters
         self.if_condition : Union[str, List[str], None] = if_condition
+        self.refresh_status()
         self.job.steps.append(self)
 
     
@@ -137,13 +137,11 @@ class ConduitStep:
             self.status = ConduitStatus.BLOCK_NOT_FOUND
         elif self.is_id_duplicate:
             self.status = ConduitStatus.DUPLICATE_STEP_IDS
-        elif not self.block.exists_tags(self.tags):
+        elif not self.block.exists_tags(self.job.tags):
             self.status = ConduitStatus.FORBIDDEN_BLOCK
-        elif self._get_block_limit(self.block)[0]:
+        elif self.job._get_block_limit(self.block)[0]:
             self.status = ConduitStatus.BLOCK_LIMIT_EXCEED
-        elif not self.check_if_condition():
-            self.status = ConduitStatus.IF_CONDITION_FAILED
-        elif self.step_limit != None and len(self.steps) > self.step_limit:
+        elif self.job.step_limit != None and len(self.job.steps) > self.job.step_limit:
             self.status = ConduitStatus.STEP_LIMIT_EXCEED
         else:
             self.status = ConduitStatus.NONE

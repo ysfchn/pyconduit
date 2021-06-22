@@ -90,7 +90,7 @@ def parse_slice(value : str) -> Optional[slice]:
     try:
         if value:
             return slice(*[int(p) if p else None for p in value.split(":")])
-    except TypeError:
+    except (TypeError, ValueError):
         return None
 
 

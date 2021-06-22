@@ -435,8 +435,10 @@ class Conduit:
             # If one of previous steps has failed don't execute the next ones.
             if self.success == None or item.forced:
                 try:
-                    if item.status != ConduitStatus.DONE:
+                    if item.status not in [ConduitStatus.DONE, ConduitStatus.NONE]:
                         raise ConduitError(item.status, item)
+                    elif not item.check_if_condition():
+                        raise ConduitBlock(ConduitStatus.IF_CONDITION_FAILED, item)
                     else:
                         process.set_function(item.function())
                         if item.block.is_coroutine:

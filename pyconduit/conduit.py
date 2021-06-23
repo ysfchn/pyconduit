@@ -438,7 +438,7 @@ class Conduit:
                     if item.status not in [ConduitStatus.DONE, ConduitStatus.NONE]:
                         raise ConduitError(item.status, item)
                     elif not item.check_if_condition():
-                        raise ConduitBlock(ConduitStatus.IF_CONDITION_FAILED, item)
+                        raise ConduitError(ConduitStatus.IF_CONDITION_FAILED, item)
                     else:
                         process.set_function(item.function())
                         if item.block.is_coroutine:

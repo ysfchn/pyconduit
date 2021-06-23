@@ -20,16 +20,30 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ["pattern_match", "parse_display_name"]
+__all__ = [
+    "pattern_match", 
+    "parse_display_name", 
+    "parse_slice", 
+    "get_key_path",
+    "validate_annotations"
+]
 
 from typing import (
     Tuple,
     Optional,
     Any,
-    Union
+    Union,
+    Dict,
+    Type
 )
 import re
 from pyconduit.other import ScopedObject
+
+
+try:
+    from pydantic import create_model, ValidationError
+except (ImportError, ModuleNotFoundError):
+    create_model = None
 
 
 def pattern_match(item : str, pattern : str, strict : bool = True) -> bool:
@@ -123,3 +137,25 @@ def get_key_path(obj : Union[dict, list, ScopedObject, str], key : str) -> Any:
         elif isinstance(current_value, dict):
             current_value = current_value[item]
     return current_value
+
+
+def validate_annotations(
+    annotations : Dict[str, Any], 
+    data : Dict[str, Any], 
+    config = None
+) -> bool:
+    """
+    Validates annotations with pydantic library and returns a 
+    ValidationError if data is not valid, otherwise it returns None.
+    """
+    if create_model == None:
+        raise Exception("pydantic has not installed")
+    model = create_model(
+        "custom_validation_model", 
+        __config__ = config,
+        **annotations
+    )
+    try:
+        model(**data)
+    except ValidationError as val:
+        return val

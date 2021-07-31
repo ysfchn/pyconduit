@@ -16,5 +16,4 @@ jobs:
         pip install wheel wrapt pydantic mkdocs mkdocs-material mkdocstrings
     - name: Mkdocs GitHub publish
       run: |
-        git pull
-        mkdocs gh-deploy -v
+        mkdocs gh-deploy --clean -v --force --remote-branch gh-pages

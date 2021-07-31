@@ -207,7 +207,7 @@ class ConduitStep:
         else:
             val = value
             for item in contexts:
-                val = ConduitStep._parse_context_string(data, val.replace(item, ConduitStep._parse_context_tag(data, item)))
+                val = ConduitStep._parse_context_string(data, val.replace(item, str(ConduitStep._parse_context_tag(data, item))))
             return val
 
     

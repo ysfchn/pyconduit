@@ -82,6 +82,9 @@ class Conduit:
             If you want to add a maximum number to the step count, you can set it here. Users will still able to create steps even if they
             exceed the limit, however when job has executed, it will exit with an code that says step limit has exceeded. `None` (which is default)
             means unlimited count of steps.
+        blocks:
+            A list of [`ConduitBlock`][pyconduit.block.ConduitBlock] objects that will be only available in this job. Make sure to register
+            blocks as "private", otherwise it will have no effect as "public" blocks are already available for all jobs.
         block_limit_overrides:
             If you want to override "max_uses" count of [`ConduitBlock`][pyconduit.block.ConduitBlock] objects only for this conduit, you can write block names and set a new limit.
     """
@@ -97,7 +100,8 @@ class Conduit:
         on_step_update : Union[Coroutine, Callable, None] = None,
         on_job_finish : Union[Coroutine, Callable, None] = None,
         step_limit : Optional[int] = None,
-        block_limit_overrides : Dict[str, Optional[int]] = {}
+        block_limit_overrides : Dict[str, Optional[int]] = {},
+        blocks : List[ConduitBlock] = []
     ) -> None:
         """
         Args:
@@ -165,7 +169,8 @@ class Conduit:
         # It is like self.global_values but this value is public for users.
         # It can be edited and read, users can also use "Variable" blocks to create variables in runtime.
         self.variables : Dict[str, ConduitVariable] = {x : (y if isinstance(y, ConduitVariable) else ConduitVariable(y)) for x, y in variables.items()}
-        self.block_limit_overrides : Dict[str, Optional[int]] = block_limit_overrides
+        self.block_limit_overrides : Dict[str, Optional[int]] = block_limit_overrides or {}
+        self.blocks : List[ConduitBlock] = blocks or []
         self._contexts : Dict[str, Any] = {}
         self.update_contexts()
 
@@ -260,6 +265,7 @@ class Conduit:
 
         `action` is the name of the block along with category. For example, if `MATH.SUM` provided as `action`,
         It searches for a block named `sum` in the `Math` category. 
+        
         Refer to [`ConduitBlock.get`][pyconduit.block.ConduitBlock.get] about getting a block by its display name.
 
         Args:
@@ -281,7 +287,7 @@ class Conduit:
         """
         _step = ConduitStep(
             job = self, 
-            block = ConduitBlock.get(action), 
+            block = ConduitBlock.get(action) or next(x for x in self.blocks if x.display_name == action), 
             parameters = parameters, 
             id = id, 
             forced = forced, 

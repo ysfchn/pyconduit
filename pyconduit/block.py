@@ -53,7 +53,7 @@ class ConduitBlockBase:
         """
         self.name : str = name.upper()
         self.category : Optional[str] = None if not category else category.upper()
-        if "." in self.name or "." in self.category:
+        if self.category and ("." in self.name or "." in self.category):
             raise ValueError("block name and category name can't contain dots (.)")
         self.max_uses : Optional[int] = max_uses
         self.private : bool = private

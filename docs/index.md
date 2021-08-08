@@ -4,6 +4,8 @@
 
 # pyconduit
 
+> The project is still under development. Most functions should work correctly, but a few bugs may appear.
+
 A simple workflow manager that executes pre-defined functions from user-defined workflow files. You ("developer") create the functions, and they ("users") will able to call the functions by typing its name and pass the required parameters.
 
 It can be used to provide a "custom code evaluation" / "safe eval" feature to your users in your app. So they will only able to access functions that you allow. Users can also reference to other steps, set variables, and use standard functions in their workflow files.

@@ -29,8 +29,7 @@ from pyconduit import ConduitStatus
 from pyconduit import ConduitStep, ConduitVariable
 from pyconduit import ConduitBlock
 from pyconduit.other import _ConduitProcess
-from pyconduit.utils import pattern_match
-import asyncio
+from pyconduit.utils import pattern_match, parse_display_name
 
 try:
     from pydantic import ValidationError
@@ -287,13 +286,25 @@ class Conduit:
         """
         _step = ConduitStep(
             job = self, 
-            block = ConduitBlock.get(action) or next(x for x in self.blocks if x.display_name == action), 
+            block = ConduitBlock.get(action) or self._get_block(action), 
             parameters = parameters, 
             id = id, 
             forced = forced, 
             if_condition = if_condition
         )
         return _step
+
+    
+    def _get_block(
+        self,
+        display_name : str
+    ) -> Union[ConduitBlock, ConduitBlock._Partial]:
+        try:
+            return next(x for x in self.blocks if x.display_name == display_name)
+        except StopIteration:
+            pass
+        category, name = parse_display_name(display_name)
+        return ConduitBlock._Partial(name = name, category = category)
 
 
     def get_step(

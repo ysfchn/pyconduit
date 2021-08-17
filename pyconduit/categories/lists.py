@@ -74,6 +74,48 @@ class Lists(ConduitCategory):
 
     
     @conduitblock.make
+    def includes(*, item : Any, list : Union[List[Any], ConduitVariable]) -> bool:
+        """
+        Checks if item in the list.
+
+        Args:
+            item:
+                The item that will be checked.
+            list:
+                The list that will be used in the operation.
+        """
+        return item in list
+
+    
+    @conduitblock.make
+    def includes_any(*, items : Union[List[Any], ConduitVariable], list : Union[List[Any], ConduitVariable]) -> bool:
+        """
+        Checks if one of the items in the list.
+
+        Args:
+            items:
+                A list of items that will be checked.
+            list:
+                The list that will be used in the operation.
+        """
+        return any([x in list for x in items])
+
+    
+    @conduitblock.make
+    def includes_all(*, items : Union[List[Any], ConduitVariable], list : Union[List[Any], ConduitVariable]) -> bool:
+        """
+        Checks if all of the items in the list.
+
+        Args:
+            items:
+                A list of items that will be checked.
+            list:
+                The list that will be used in the operation.
+        """
+        return all([x in list for x in items])
+
+    
+    @conduitblock.make
     def clear(*, list : Union[List[Any], ConduitVariable]) -> None:
         """
         Remove all items from list.

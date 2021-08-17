@@ -86,6 +86,34 @@ class Text(ConduitCategory):
         """
         return piece in text
 
+    
+    @conduitblock.make
+    def includes_any(*, text : str, pieces : List[str]) -> bool:
+        """
+        Checks if one of the pieces in the text.
+
+        Args:
+            text:
+                The text that pieces will be checked in.
+            pieces:
+                A list of pieces that will be searched.
+        """
+        return any([x in text for x in pieces])
+
+    
+    @conduitblock.make
+    def includes_all(*, text : str, pieces : List[str]) -> bool:
+        """
+        Checks if all of the pieces in the text.
+
+        Args:
+            text:
+                The text that pieces will be checked in.
+            pieces:
+                A list of pieces that will be searched.
+        """
+        return all([x in text for x in pieces])
+
 
     @conduitblock.make
     def count(*, text : str) -> int:
@@ -199,6 +227,32 @@ class Text(ConduitCategory):
         """
         return text.split(sep = seperator, maxsplit = maxsplit)
 
+    
+    @conduitblock.make
+    def split_lines(*, text : str, keep_ends : bool = False) -> List[str]:
+        """
+        Return a list of the lines in the string, breaking at line boundaries.
+        
+        Args:
+            text:
+                The text that will be used in the operation.
+            keep_ends:
+                Include line breaks in the resulting list.
+        """
+        return text.splitlines(keepends = keep_ends)
+
+    
+    @conduitblock.make
+    def split_chars(*, text : str) -> List[str]:
+        """
+        Return a list of the characters in the string.
+        
+        Args:
+            text:
+                The text that will be used in the operation.
+        """
+        return list(text)
+
 
     @conduitblock.make
     def titlecase(*, text : str) -> str:
@@ -252,6 +306,19 @@ class Text(ConduitCategory):
                 The text that will be used in the operation.
         """
         return text.isnumeric()
+
+    
+    @conduitblock.make
+    def is_alpha(*, text : str) -> bool:
+        """
+        Return `True` if the string is an alphabetic string, `False` otherwise.
+        A string is alphabetic if all characters in the string are alphabetic and there is at least one character in the string.
+        
+        Args:
+            text:
+                The text that will be used in the operation.
+        """
+        return text.isalpha()
 
 
     @conduitblock.make

@@ -13,7 +13,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install wheel wrapt pydantic mkdocs mkdocs-material mkdocstrings
+        pip install wheel
+        pip install -r docs/requirements.txt
+        pip install -r requirements.txt
     - name: Mkdocs GitHub publish
       run: |
         mkdocs gh-deploy --clean -v --force --remote-branch gh-pages

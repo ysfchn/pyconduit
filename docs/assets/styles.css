@@ -1,0 +1,20 @@
+/* Change dark theme hue. */
+[data-md-color-scheme="slate"] {
+    --md-hue: 220;
+}
+
+/* Bigger admontion and tables. */
+.admonition, table, details {
+    font-size: .7rem !important;
+}
+
+/* Bigger admoniton icon. */
+.admonition-title::before, details > summary::before, details > summary::after {
+    height: 23px !important;
+    width: 23px !important;
+}
+
+/* Add more space to adomoniton icon. */
+.admonition-title, details > summary {
+    padding: .4rem .6rem .4rem 2.2rem !important;
+}

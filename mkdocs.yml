@@ -8,7 +8,7 @@ nav:
   - Running Job: running_job.md
   - Blocks:
     - Dictionary: blocks/dictionary.md
-    - List: blocks/list.md
+    - Lists: blocks/lists.md
     - Logic: blocks/logic.md
     - Math: blocks/math.md
     - Object: blocks/object.md
@@ -41,6 +41,9 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to light mode
+
+extra_css:
+  - assets/styles.css
 
 plugins:
   - mkdocstrings:

@@ -92,6 +92,8 @@ class Text(ConduitCategory):
         """
         Checks if one of the pieces in the text.
 
+        _Added in v1.1_
+
         Args:
             text:
                 The text that pieces will be checked in.
@@ -105,6 +107,8 @@ class Text(ConduitCategory):
     def includes_all(*, text : str, pieces : List[str]) -> bool:
         """
         Checks if all of the pieces in the text.
+
+        _Added in v1.1_
 
         Args:
             text:
@@ -232,6 +236,8 @@ class Text(ConduitCategory):
     def split_lines(*, text : str, keep_ends : bool = False) -> List[str]:
         """
         Return a list of the lines in the string, breaking at line boundaries.
+
+        _Added in v1.1_
         
         Args:
             text:
@@ -246,6 +252,8 @@ class Text(ConduitCategory):
     def split_chars(*, text : str) -> List[str]:
         """
         Return a list of the characters in the string.
+
+        _Added in v1.1_
         
         Args:
             text:
@@ -314,6 +322,8 @@ class Text(ConduitCategory):
         Return `True` if the string is an alphabetic string, `False` otherwise.
         A string is alphabetic if all characters in the string are alphabetic and there is at least one character in the string.
         
+        _Added in v1.1_
+
         Args:
             text:
                 The text that will be used in the operation.

@@ -78,6 +78,8 @@ class Lists(ConduitCategory):
         """
         Checks if item in the list.
 
+        _Added in v1.1_
+
         Args:
             item:
                 The item that will be checked.
@@ -92,6 +94,8 @@ class Lists(ConduitCategory):
         """
         Checks if one of the items in the list.
 
+        _Added in v1.1_
+
         Args:
             items:
                 A list of items that will be checked.
@@ -105,6 +109,8 @@ class Lists(ConduitCategory):
     def includes_all(*, items : Union[List[Any], ConduitVariable], list : Union[List[Any], ConduitVariable]) -> bool:
         """
         Checks if all of the items in the list.
+
+        _Added in v1.1_
 
         Args:
             items:

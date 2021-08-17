@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, Dict, Iterable, List, Union, Tuple
+from typing import Any, Dict, List, Union, Tuple
 from pyconduit.category import ConduitCategory
 from pyconduit.category import ConduitBlock as conduitblock
 from pyconduit.step import ConduitVariable

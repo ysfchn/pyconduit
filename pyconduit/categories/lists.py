@@ -20,11 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, List, Optional, Union, Dict
+from typing import Any, List, Optional, Union
 from pyconduit.category import ConduitCategory
 from pyconduit.category import ConduitBlock as conduitblock
 from pyconduit.step import ConduitVariable
 from pyconduit.other import EMPTY
+import random
 
 # Lists
 # Contains blocks to interact with lists.
@@ -287,6 +288,23 @@ class Lists(ConduitCategory):
                 The index of item.
         """
         return list[index]
+
+    
+    @conduitblock.make
+    def random(*, list : Union[List[Any], ConduitVariable]) -> Any:
+        """
+        Gets a random item from the list. 
+        
+        !!! warning "Warning"
+            Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+
+        _Added in v1.1_
+
+        Args:
+            list:
+                The list that will be used in the operation.
+        """
+        return random.choice(list)
 
     
     @conduitblock.make

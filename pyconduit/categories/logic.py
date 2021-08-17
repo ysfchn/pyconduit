@@ -20,11 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, Dict, List, Union
+from typing import Any
 from enum import Enum
 from pyconduit.category import ConduitCategory
-from pyconduit.other import ConduitError
-from pyconduit.enums import ConduitStatus
 from pyconduit.category import ConduitBlock as conduitblock
 import operator as op
 

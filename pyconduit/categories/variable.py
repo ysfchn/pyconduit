@@ -52,13 +52,17 @@ class Variable(ConduitCategory):
     @conduitblock.make
     def create(job__ : Conduit, *, name : str) -> None:
         """
-        Creates a new blank variable, if variable is already exists, raises an error.
+        Creates a new blank variable, if variable is already exists, doesn't do anything.
+
+        _In v1.1, creating a new variable that exists already doesn't raise an exception anymore. Before v1.1,
+        creating a new variable is already exists raise an exception._
 
         Args:
             name:
                 Name of the variable.
         """
-        assert name in job__.variables, name
+        if name in job__.variables:
+            return
         job__.variables[name] = ConduitVariable(None)
 
 

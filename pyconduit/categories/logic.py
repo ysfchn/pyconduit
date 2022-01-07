@@ -24,6 +24,8 @@ from typing import Any
 from enum import Enum
 from pyconduit.category import ConduitCategory
 from pyconduit.category import ConduitBlock as conduitblock
+from pyconduit.enums import ConduitStatus
+from pyconduit.other import ConduitError
 import operator as op
 
 class LogicalOperators(str, Enum):
@@ -203,9 +205,27 @@ class Logic(ConduitCategory):
 
     
     @conduitblock.make
-    def bitwise_and(*, value1 : Any, value2 : Any) -> Any:
+    def logical_nor(*, value1 : Any, value2 : Any) -> bool:
         """
-        Performs bitwise AND operation.
+        Performs logical NOR operation, returns true if all inputs are false, otherwise false.
+
+        _Added in v1.1_
+        
+        Args:
+            value1:
+                First value.
+            value2:
+                Second value.
+        """
+        return not (value1 or value2)
+
+
+    @conduitblock.make
+    def logical_nand(*, value1 : Any, value2 : Any) -> bool:
+        """
+        Performs logical NAND operation, returns true if any input is false, otherwise it returns false.
+
+        _Added in v1.1_
 
         Args:
             value1:
@@ -213,7 +233,51 @@ class Logic(ConduitCategory):
             value2:
                 Second value.
         """
-        return value1 & value2
+        return not (value1 and value2)
+
+    
+    @conduitblock.make
+    def logical_xor(*, value1 : Any, value2 : Any) -> bool:
+        """
+        Performs logical XOR operation, returns true if both value not equals in boolean context, otherwise it returns false.
+
+        _Added in v1.1_
+
+        Args:
+            value1:
+                First value.
+            value2:
+                Second value.
+        """
+        return bool(value1) != bool(value2)
+
+    
+    @conduitblock.make
+    def logical_xnor(*, value1 : Any, value2 : Any) -> bool:
+        """
+        Performs logical XNOR (aka XAND) operation, returns true if both value equals in boolean context, otherwise it returns false.
+
+        _Added in v1.1_
+
+        Args:
+            value1:
+                First value.
+            value2:
+                Second value.
+        """
+        return bool(value1) == bool(value2)
+
+    
+    @conduitblock.make
+    def bitwise_not(*, value : Any) -> Any:
+        """
+        Performs bitwise NOT operation.
+
+        Args:
+            value:
+                Any value.
+        """
+        return ~value
 
     
     @conduitblock.make
@@ -231,15 +295,33 @@ class Logic(ConduitCategory):
 
     
     @conduitblock.make
-    def bitwise_not(*, value : Any) -> Any:
+    def bitwise_and(*, value1 : Any, value2 : Any) -> Any:
         """
-        Performs bitwise NOT operation.
+        Performs bitwise AND operation.
 
         Args:
-            value:
-                Any value.
+            value1:
+                First value.
+            value2:
+                Second value.
         """
-        return ~value
+        return value1 & value2
+
+
+    @conduitblock.make
+    def bitwise_xor(*, value1 : Any, value2 : Any) -> bool:
+        """
+        Performs bitwise XOR operation, returns true if only a single value returns true, otherwise it returns false.
+
+        _Added in v1.1_
+
+        Args:
+            value1:
+                First value.
+            value2:
+                Second value.
+        """
+        return value1 ^ value2
 
     
     @conduitblock.make(name = "assert")
@@ -251,7 +333,9 @@ class Logic(ConduitCategory):
             value:
                 The value that will be checked.
         """
-        assert value, value
+        if value:
+            return
+        raise ValueError(value)
 
     
     @conduitblock.make
@@ -263,7 +347,17 @@ class Logic(ConduitCategory):
             value:
                 The value that will be checked.
         """
-        assert not value, value
+        if not value:
+            return
+        raise ValueError(value)
+
+    
+    @conduitblock.make
+    def stop() -> None:
+        """
+        Stops the current working workflow.
+        """
+        raise ConduitError(ConduitStatus.KILLED_MANUALLY, None)
 
     
     @conduitblock.make
@@ -300,4 +394,6 @@ class Logic(ConduitCategory):
             LogicalOperators.IS: op.is_,
             LogicalOperators.IS_NOT: op.is_not
         }
-        assert _operators[operator](value1, value2), False
+        if _operators[operator](value1, value2):
+            return
+        raise ValueError((value1, value2, ))

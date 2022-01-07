@@ -464,9 +464,6 @@ class Conduit:
                         else:
                             # Execute the function as it is.
                             item.return_value = process.run()
-                except AssertionError as asr:
-                    item.status = ConduitStatus.ASSERTION_ERROR
-                    item.return_value = asr if len(asr.args) != 1 else asr.args[0]
                 except ValueError as vae:
                     item.status = ConduitStatus.INVALID_ARGUMENT
                     item.return_value = vae if len(vae.args) != 1 else vae.args[0]

@@ -22,10 +22,9 @@
 
 __all__ = ["ConduitBlock"]
 
-from typing import Coroutine, List, Callable, Any, Dict, Optional, Tuple, Union
+from typing import Coroutine, List, Callable, Any, Dict, Optional, Union
 import inspect
-from pyconduit.utils import parse_display_name
-from pyconduit.collection import BlocksCollection
+from pyconduit.utils import parse_display_name, pattern_match
 
 # If pydantic is available, use pydantic's validate arguments function.
 try:
@@ -35,9 +34,14 @@ except (ImportError, ModuleNotFoundError):
 
 
 class ConduitBlockBase:
-    """
-    Test
-    """
+    __slots__ = (
+        "name",
+        "category",
+        "max_uses",
+        "private",
+        "tags",
+        "function"
+    )
 
     def __init__(
         self,
@@ -48,9 +52,6 @@ class ConduitBlockBase:
         tags : List[str] = [],
         function : Union[None, Callable, Coroutine] = None
     ) -> None:
-        """
-        Test2
-        """
         self.name : str = name.upper()
         self.category : Optional[str] = None if not category else category.upper()
         if self.category and ("." in self.name or "." in self.category):
@@ -223,8 +224,18 @@ class ConduitBlock(ConduitBlockBase):
             Limits the usage count for this block per job. For example, if this set to 1, it will not be possible to execute this 
             block more than once. This can be overriden by `block_limit_overrides` attribute in [`Conduit`][pyconduit.conduit.Conduit]
     """
+    __slots__ = (
+        "name",
+        "category",
+        "max_uses",
+        "private",
+        "tags",
+        "function",
+        "__wrapped__"
+    )
+
     _Partial = ConduitPartialBlock
-    _blocks : BlocksCollection = {}
+    blocks : Dict[str, "ConduitBlock"] = {}
 
     def __init__(
         self, 
@@ -271,10 +282,10 @@ class ConduitBlock(ConduitBlockBase):
         # TODO: These won't work because Python calls magic methods on class itself because of instances.
         self.__wrapped__ = function
         self.__call__ = function
-        if self.display_name in ConduitBlock._blocks:
+        if self.display_name in ConduitBlock.blocks:
             raise ValueError(f"the block named '{self.display_name}' already exists, you can't define it multiple times")
         if not self.private:
-            ConduitBlock._blocks[self.display_name] = self
+            ConduitBlock.blocks[self.display_name] = self
 
     def __bool__(self) -> bool:
         return True
@@ -324,7 +335,7 @@ class ConduitBlock(ConduitBlockBase):
             [`ConduitPartialBlock`][pyconduit.block.ConduitPartialBlock] if block is not found.
         """
         category, name = parse_display_name(display_name)
-        return cls._blocks.get(display_name, cls._Partial(name, category))
+        return cls.blocks.get(display_name, cls._Partial(name, category))
 
     
     @classmethod
@@ -340,7 +351,7 @@ class ConduitBlock(ConduitBlockBase):
             A [`ConduitBlock`][pyconduit.block.ConduitBlock] object or 
             None if no matching block has found.
         """
-        return cls._blocks.match_first(pattern)
+        return next((v for k, v in cls.blocks.items() if pattern_match(k.display_name, pattern, strict = True)), None)
 
     
     @classmethod
@@ -356,7 +367,7 @@ class ConduitBlock(ConduitBlockBase):
             A list of [`ConduitBlock`][pyconduit.block.ConduitBlock] object or 
             a empty list if no matching block has found.
         """
-        return cls._blocks.match_all(pattern)
+        return [v for k, v in cls.blocks.items() if pattern_match(k.display_name, pattern, strict = True)]
 
 
     @staticmethod

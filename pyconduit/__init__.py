@@ -22,7 +22,7 @@
 
 __all__ = ["ConduitError", "ConduitBlock", "ConduitCategory", 
 "Conduit", "ConduitStep", "ConduitVariable", "ConduitStatus", 
-"ExtendedList", "ExtendedDict", "BlocksCollection"]
+"ExtendedList", "ExtendedDict"]
 
 from pyconduit.enums import ConduitStatus
 from pyconduit.other import ConduitError
@@ -30,6 +30,6 @@ from pyconduit.block import ConduitBlock
 from pyconduit.category import ConduitCategory
 from pyconduit.step import ConduitStep, ConduitVariable
 from pyconduit.conduit import Conduit
-from pyconduit.collection import ExtendedList, ExtendedDict, BlocksCollection
+from pyconduit.collection import ExtendedList, ExtendedDict
 
 from pyconduit.categories import __modules__

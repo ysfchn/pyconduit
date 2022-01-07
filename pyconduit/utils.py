@@ -37,7 +37,8 @@ from typing import (
     Type
 )
 import re
-from pyconduit.other import ScopedObject
+from pyconduit.enums import ConduitStatus
+from pyconduit.other import ConduitError, ScopedObject
 
 
 try:
@@ -125,17 +126,22 @@ def get_key_path(obj : Union[dict, list, ScopedObject, str], key : str) -> Any:
         The final value.
     """
     current_value = obj
-    for item in key.split("."):
-        if item.startswith("__") or item.endswith("__") or item.startswith("_") or item.endswith("_"):
-            raise KeyError(item)
-        elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
-            current_value = current_value[int(item)]
-        elif isinstance(current_value, (list, str)) and parse_slice(item) != None:
-            current_value = current_value[parse_slice(item)]
-        elif isinstance(current_value, ScopedObject):
-            current_value = getattr(current_value, item)
-        elif isinstance(current_value, dict):
-            current_value = current_value[item]
+    try:
+        for item in key.split("."):
+            if item.startswith("__") or item.endswith("__") or item.startswith("_") or item.endswith("_"):
+                current_value = None
+            elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
+                current_value = current_value[int(item)]
+            elif isinstance(current_value, (list, str)) and parse_slice(item) != None:
+                current_value = current_value[parse_slice(item)]
+            elif isinstance(current_value, ScopedObject):
+                current_value = getattr(current_value, item)
+            elif isinstance(current_value, dict):
+                current_value = current_value[item]
+    # If context value is not found, return None.
+    # Maybe it can be replaced to raising ConduitError in the future.
+    except (KeyError, IndexError):
+        return
     return current_value
 
 

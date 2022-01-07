@@ -47,10 +47,7 @@ class ConduitStatus(Enum):
     BLOCK_LIMIT_EXCEED = 109
     # If condition failed.
     IF_CONDITION_FAILED = 110
-
-    # Block specific errors:
-
-    # Used in "assert" blocks.
-    ASSERTION_ERROR = 106
     # Invalid argument has provided for function.
     INVALID_ARGUMENT = 103
+    # Conduit killed manually.
+    KILLED_MANUALLY = 111

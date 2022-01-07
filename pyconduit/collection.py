@@ -20,16 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ["ExtendedList", "ExtendedDict", "BlocksCollection"]
+__all__ = ["ExtendedList", "ExtendedDict"]
 
 from collections import UserDict, UserList, OrderedDict
 import random
-from pyconduit.utils import pattern_match
 
-from typing import Any, Optional, TYPE_CHECKING, List, Tuple, Union
-
-if TYPE_CHECKING:
-    from pyconduit import ConduitBlock
+from typing import Any, Optional, List, Tuple
 
 class ExtendedList(UserList):
     """
@@ -149,20 +145,3 @@ class ExtendedDict(UserDict):
         Returns the last item. If list is empty, returns the default.
         """
         return ExtendedList(list(self.data.items())).last_or_default(default = default)
-
-
-class BlocksCollection(ExtendedDict):
-    """
-    A simple collection that holds ConduitBlocks.
-    """
-    def match_all(self, pattern : str, strict : bool = True) -> List["ConduitBlock"]:
-        """
-        Returns a list of ConduitBlocks that matches with the specified wildcard (glob) pattern.
-        """
-        return [v for k, v in self.data.items() if pattern_match(k.display_name, pattern, strict = strict)]
-
-    def match_first(self, pattern : str, strict : bool = True) -> Optional["ConduitBlock"]:
-        """
-        Returns the first ConduitBlock that matches with the specified wildcard (glob) pattern.
-        """
-        next((v for k, v in self.data.items() if pattern_match(k.display_name, pattern, strict = strict)), None)

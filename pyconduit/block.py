@@ -34,14 +34,6 @@ except (ImportError, ModuleNotFoundError):
 
 
 class ConduitBlockBase:
-    __slots__ = (
-        "name",
-        "category",
-        "max_uses",
-        "private",
-        "tags",
-        "function"
-    )
 
     def __init__(
         self,
@@ -224,15 +216,6 @@ class ConduitBlock(ConduitBlockBase):
             Limits the usage count for this block per job. For example, if this set to 1, it will not be possible to execute this 
             block more than once. This can be overriden by `block_limit_overrides` attribute in [`Conduit`][pyconduit.conduit.Conduit]
     """
-    __slots__ = (
-        "name",
-        "category",
-        "max_uses",
-        "private",
-        "tags",
-        "function",
-        "__wrapped__"
-    )
 
     _Partial = ConduitPartialBlock
     blocks : Dict[str, "ConduitBlock"] = {}

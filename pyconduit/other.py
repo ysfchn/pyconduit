@@ -22,7 +22,7 @@
 
 __all__ = ["ConduitError", "EMPTY"]
 
-from typing import Callable, List, Any, TYPE_CHECKING
+from typing import Callable, List, Any, TYPE_CHECKING, Optional
 from pyconduit import ConduitStatus
 from multiprocessing import Process
 
@@ -35,16 +35,18 @@ class ConduitError(Exception):
     ## ConduitError
     A custom exception for errors that occurs in Actions.
     """
-    def __init__(self, status : ConduitStatus, step : "ConduitStep", *args): 
+    def __init__(self, status : ConduitStatus, step : Optional["ConduitStep"] = None, *args): 
         self.status = status
         self.step = step
         super(ConduitError, self).__init__(status, step, *args)
 
     @property
     def text(self) -> str:
-        return f"{self.status.name} ({self.status.value})" + "\n" + \
-        f"Step: {self.step.id} (#{self.step.position})" + "\n" + \
-        f"Block: {self.step.block.display_name}"
+        return f"{self.status.name} ({self.status.value})" + \
+            ("" if not self.step else \
+                f"\nStep: {self.step.id} (#{self.step.position})" + \
+                f"\nBlock: {self.step.block.display_name}"
+            )
 
 
 class _ConduitProcess(Process):

@@ -356,6 +356,8 @@ class Logic(ConduitCategory):
     def stop() -> None:
         """
         Stops the current working workflow.
+
+        _Added in v1.1_
         """
         raise ConduitError(ConduitStatus.KILLED_MANUALLY, None)
 

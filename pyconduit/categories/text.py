@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, List
+from typing import Any, List, Optional
 from pyconduit.category import ConduitCategory
 from pyconduit.category import ConduitBlock as conduitblock
 
@@ -360,3 +360,23 @@ class Text(ConduitCategory):
                 If given, only the first count occurrences are replaced.
         """
         return text.replace(old, new, count)
+
+
+    @conduitblock.make(name = "slice")
+    def slice_(*, text : str, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> str:
+        """
+        Slices a text.
+
+        _Added in v1.1_
+
+        Args:
+            text:
+                The text that will be used in the operation.
+            stop:
+                Character index to stop slicing. 
+            start:
+                Character index to start slicing. 
+            step:
+                Character index to step slicing. 
+        """
+        return text[slice(start, stop, step)]

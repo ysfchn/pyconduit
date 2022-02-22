@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = ["ConduitError", "EMPTY"]
+__all__ = ["ConduitError", "EMPTY", "ConduitIterator"]
 
 from typing import Callable, List, Any, TYPE_CHECKING, Optional
 from pyconduit import ConduitStatus
@@ -78,6 +78,30 @@ class _Empty:
 
     def __len__(self):
         return 0
+
+
+class ConduitIterator:
+    """
+    A custom iterator for Conduit steps that supports
+    adding new steps while keeping the index.
+    """
+    def __init__(self, items):
+        self._items = items or []
+        self._seen_items = 0
+
+    def __iter__(self):
+        return self
+
+    def add_item(self, item):
+        self._items.insert(self._seen_items, item)
+
+    def __next__(self):
+        self._seen_items += 1
+        try:
+            return self._items[self._seen_items - 1]
+        except IndexError:
+            self._seen_items = 0
+            raise StopIteration
 
 
 EMPTY = _Empty()

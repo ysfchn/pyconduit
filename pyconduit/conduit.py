@@ -28,7 +28,7 @@ from pyconduit import ConduitError
 from pyconduit import ConduitStatus
 from pyconduit import ConduitStep, ConduitVariable
 from pyconduit import ConduitBlock
-from pyconduit.other import _ConduitProcess
+from pyconduit.other import _ConduitProcess, ConduitIterator
 from pyconduit.utils import pattern_match, parse_display_name
 
 try:
@@ -171,6 +171,7 @@ class Conduit:
         self.block_limit_overrides : Dict[str, Optional[int]] = block_limit_overrides or {}
         self.blocks : List[ConduitBlock] = blocks or []
         self._contexts : Dict[str, Any] = {}
+        self._steps_iterator : Optional[ConduitIterator] = None
         self.update_contexts()
 
     
@@ -185,6 +186,14 @@ class Conduit:
             `None` if job has never executed yet. 
         """
         return self._success
+
+    
+    @property
+    def running(self) -> bool:
+        """
+        Returns True if job is currently running. Otherwise, False.
+        """
+        return self._steps_iterator != None
 
     
     @classmethod
@@ -257,7 +266,8 @@ class Conduit:
         parameters : dict = {}, 
         id : Optional[str] = None, 
         forced : bool = False, 
-        if_condition : Union[str, List[str], None] = None
+        if_condition : Union[str, List[str], None] = None,
+        attach : Optional[bool] = None
     ) -> ConduitStep:
         """
         Creates a new step in this job then returns the created step (after adding it to job).
@@ -280,6 +290,10 @@ class Conduit:
             if_condition:
                 A list or string of if conditions that contains context values. These conditions will be checked before block executing starts,
                 so if one (or more) of conditions fails, then the step will not be executed.
+            attach:
+                If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
+                job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
+                automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
         
         Returns:
             The created step.
@@ -290,7 +304,8 @@ class Conduit:
             parameters = parameters, 
             id = id, 
             forced = forced, 
-            if_condition = if_condition
+            if_condition = if_condition,
+            attach = attach
         )
         return _step
 
@@ -313,7 +328,9 @@ class Conduit:
         silent : bool = False
     ) -> Union[ConduitStep, None]:
         """
-        Gets a step in the job. 
+        Gets a step in the job.
+
+        This currently don't work for created steps in job runtime. 
         
         If `step` parameter is `int`, then it looks for step positions (which starts from 1).
         If `step` parameter is `str`, then it looks for step IDs.
@@ -349,6 +366,8 @@ class Conduit:
     ) -> None:
         """
         Deletes a step from the job. 
+
+        This currently don't work for created steps in job runtime. 
         
         If `step` parameter is `int`, then it looks for step positions (which starts from 1).
         If `step` parameter is `str`, then it looks for step IDs.
@@ -415,7 +434,7 @@ class Conduit:
                     },
                     "parameters": step.parameters,
                     "id": step.id,
-                } for step in self.steps
+                } for step in (self._steps_iterator or self.steps)
             }
         }
     
@@ -446,7 +465,8 @@ class Conduit:
         failed_step = None
         self._success = None
         process = _ConduitProcess()
-        for item in self.steps:
+        self._steps_iterator = ConduitIterator(self.steps)
+        for item in self._steps_iterator:
             self.update_contexts()
             # Refresh the contexts (job parameters).
             # If one of previous steps has failed don't execute the next ones.
@@ -491,6 +511,7 @@ class Conduit:
                 else:
                     self.on_step_update(self, item)
         process.close()
+        self._steps_iterator = None
         # If there are no any errors in the jobs, set the success to True.
         if self.success == None:
             self._success = True

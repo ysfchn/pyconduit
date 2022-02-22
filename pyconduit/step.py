@@ -76,6 +76,10 @@ class ConduitStep:
             It is used to store the status of step.
         return_value:
             The value that returned after executing the step. If step is not executed yet, this will be `None`.
+        attach:
+            If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
+            job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
+            automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
     """
     def __init__(
         self, 
@@ -84,7 +88,8 @@ class ConduitStep:
         parameters : dict = {}, 
         if_condition : Union[str, List[str], None] = None, 
         id : Optional[str] = None,
-        forced : bool = False
+        forced : bool = False,
+        attach : Optional[bool] = None
     ) -> None:
         """
         Args:
@@ -102,6 +107,10 @@ class ConduitStep:
             if_condition:
                 A list or string of if conditions that contains context values. These conditions will be checked before block executing starts,
                 so if one (or more) of conditions fails, then the step will not be executed.
+            attach:
+                If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
+                job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
+                automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
         """
         self.job = job
         self._position : int = len(self.job.steps) + 1
@@ -115,7 +124,12 @@ class ConduitStep:
         self.parameters : Dict[str, Any] = parameters
         self.if_condition : Union[str, List[str], None] = if_condition
         self.refresh_status()
-        self.job.steps.append(self)
+        if (attach == None) and (self.job.running):
+            self.job._steps_iterator.add_item(self)
+        elif attach == False:
+            pass
+        else:
+            self.job.steps.append(self)
 
     
     @property

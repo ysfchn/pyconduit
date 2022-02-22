@@ -216,7 +216,7 @@ class ConduitStep:
         for step in self.routes[n]:
             self.job._steps_iterator.add_item(step)
 
-    
+
     @staticmethod
     def _parse_content_all(data : dict, value : Any) -> Any:
         """

@@ -44,6 +44,8 @@ class ConduitVariable(ObjectProxy):
 
 
 class ConduitStep:
+    DEFAULT_ROUTE_NAME = "default"
+
     """
     Represents a single step that is in the job.
 
@@ -80,6 +82,13 @@ class ConduitStep:
             If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
             job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
             automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
+        ctx:
+            Any extra value for this step.
+        routes:
+            Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
+            current running job's steps.
+        route_checks:
+            A mapping of route names and conditions for enabling a route automatically.
     """
     def __init__(
         self, 
@@ -89,7 +98,10 @@ class ConduitStep:
         if_condition : Union[str, List[str], None] = None, 
         id : Optional[str] = None,
         forced : bool = False,
-        attach : Optional[bool] = None
+        attach : Optional[bool] = None,
+        ctx : Optional[Any] = None,
+        routes : Optional[Dict[str, List["ConduitStep"]]] = None,
+        route_checks : Optional[Dict[str, Union[List[str], str]]] = None
     ) -> None:
         """
         Args:
@@ -111,6 +123,13 @@ class ConduitStep:
                 If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
                 job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
                 automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
+            ctx:
+                Any extra value for this step.
+            routes:
+                Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
+                current running job's steps.
+            route_checks:
+                A mapping of route names and conditions for enabling a route automatically.
         """
         self.job = job
         self._position : int = len(self.job.steps) + 1
@@ -123,6 +142,9 @@ class ConduitStep:
         self.return_value : Any = None
         self.parameters : Dict[str, Any] = parameters
         self.if_condition : Union[str, List[str], None] = if_condition
+        self.ctx : Optional[Any] = ctx
+        self.routes : Dict[str, List["ConduitStep"]] = routes or {}
+        self.route_checks : Optional[Dict[str, Union[List[str], str]]] = route_checks
         self.refresh_status()
         if (attach == None) and (self.job.running):
             self.job._steps_iterator.add_item(self)
@@ -131,7 +153,7 @@ class ConduitStep:
         else:
             self.job.steps.append(self)
 
-    
+
     @property
     def position(self) -> int:
         """
@@ -180,6 +202,19 @@ class ConduitStep:
             # Save to params.
             params[key] = val
         return params
+
+
+    def activate_router(self, name : Optional[str] = None) -> None:
+        """
+        Appends all steps to current running job in specified route name.
+        """
+        n = name or self.DEFAULT_ROUTE_NAME
+        if n not in self.routes:
+            raise KeyError(f"Route '{name}' couldn't found.")
+        if not self.job.running:
+            raise ValueError("A route can't be activated when job is not running.")
+        for step in self.routes[n]:
+            self.job._steps_iterator.add_item(step)
 
     
     @staticmethod
@@ -260,6 +295,21 @@ class ConduitStep:
             else:
                 return all([self._parse_content_all(self.job.contexts, x) for x in self.if_condition])
         return True
+
+
+    def get_valid_route(self) -> Optional[str]:
+        """
+        Checks for all route checks and gets the first name of the passed route.
+        """
+        if self.route_checks == None:
+            return None
+        for k, v in self.route_checks.items():
+            if isinstance(v, str):
+                if self._parse_content_all(self.job.contexts, v):
+                    return k
+            else:
+                if all([self._parse_content_all(self.job.contexts, x) for x in v]):
+                    return k
 
 
     def function(self) -> Union[Callable, Coroutine]:

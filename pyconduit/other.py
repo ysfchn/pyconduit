@@ -22,7 +22,7 @@
 
 __all__ = ["ConduitError", "EMPTY", "ConduitIterator"]
 
-from typing import Callable, List, Any, TYPE_CHECKING, Optional
+from typing import Callable, Generic, List, Any, TYPE_CHECKING, Optional, TypeVar
 from pyconduit import ConduitStatus
 from multiprocessing import Process
 
@@ -80,22 +80,25 @@ class _Empty:
         return 0
 
 
-class ConduitIterator:
+T = TypeVar('T')
+
+
+class ConduitIterator(Generic[T]):
     """
     A custom iterator for Conduit steps that supports
     adding new steps while keeping the index.
     """
-    def __init__(self, items):
+    def __init__(self, items : List[T]):
         self._items = items or []
         self._seen_items = 0
 
     def __iter__(self):
         return self
 
-    def add_item(self, item):
+    def add_item(self, item : T):
         self._items.insert(self._seen_items, item)
 
-    def __next__(self):
+    def __next__(self) -> T:
         self._seen_items += 1
         try:
             return self._items[self._seen_items - 1]

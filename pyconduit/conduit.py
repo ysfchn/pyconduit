@@ -240,7 +240,11 @@ class Conduit:
                 parameters = step.get("parameters", {}),
                 id = step.get("id"),
                 forced = step.get("forced", False),
-                if_condition = step.get("if")
+                if_condition = step.get("if"),
+                attach = step.get("attach"),
+                ctx = step.get("ctx"),
+                routes = step.get("routes"),
+                route_checks = step.get("route_checks") 
             )
 
     
@@ -267,7 +271,10 @@ class Conduit:
         id : Optional[str] = None, 
         forced : bool = False, 
         if_condition : Union[str, List[str], None] = None,
-        attach : Optional[bool] = None
+        attach : Optional[bool] = None,
+        ctx : Optional[Any] = None,
+        routes : Optional[Union[Dict[str, List["ConduitStep"]], List["ConduitStep"]]] = None,
+        route_checks : Optional[Dict[str, Union[List[str], str]]] = None
     ) -> ConduitStep:
         """
         Creates a new step in this job then returns the created step (after adding it to job).
@@ -294,10 +301,21 @@ class Conduit:
                 If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
                 job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
                 automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
+            ctx:
+                Any extra value for this step.
+            routes:
+                Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
+                current running job's steps.
+            route_checks:
+                A mapping of route names and conditions for enabling a route automatically.
         
         Returns:
             The created step.
         """
+        _routes = \
+            {} if not routes else \
+            { ConduitStep.DEFAULT_ROUTE_NAME : routes } if isinstance(routes, list) else \
+            routes
         _step = ConduitStep(
             job = self, 
             block = ConduitBlock.get(action) or self._get_block(action), 
@@ -305,7 +323,22 @@ class Conduit:
             id = id, 
             forced = forced, 
             if_condition = if_condition,
-            attach = attach
+            attach = attach,
+            ctx = ctx,
+            routes = { k : [
+                self.create_step(
+                    step["action"],
+                    parameters = step.get("parameters", {}),
+                    id = step.get("id"),
+                    forced = step.get("forced", False),
+                    if_condition = step.get("if"),
+                    attach = False,
+                    ctx = step.get("ctx"),
+                    routes = step.get("routes"),
+                    route_checks = step.get("route_checks") 
+                ) for step in v
+            ] for k, v in _routes.items() },
+            route_checks = route_checks
         )
         return _step
 
@@ -477,6 +510,9 @@ class Conduit:
                     elif not item.check_if_condition():
                         raise ConduitError(ConduitStatus.IF_CONDITION_FAILED, item)
                     else:
+                        route = item.get_valid_route()
+                        if route:
+                            item.activate_router(route)
                         process.set_function(item.function())
                         if item.block.is_coroutine:
                             # Execute the function as coroutine.

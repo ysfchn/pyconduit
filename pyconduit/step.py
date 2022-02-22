@@ -224,8 +224,7 @@ class ConduitStep:
             raise KeyError(f"Route '{name}' couldn't found.")
         if not self.job.running:
             raise ValueError("A route can't be activated when job is not running.")
-        for step in self.routes[n]:
-            self.job._steps_iterator.add_item(step)
+        self.job._steps_iterator.add_items(self.routes[n])
 
 
     @staticmethod

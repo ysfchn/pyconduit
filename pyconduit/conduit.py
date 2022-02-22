@@ -451,6 +451,7 @@ class Conduit:
         Returns:
             A dictionary that contains information about this job.
         """
+        steps = self.steps if not self.running else ConduitIterator(list(self._steps_iterator._items))
         return { 
             "job": {
                 "name": self.name,
@@ -474,7 +475,7 @@ class Conduit:
                     },
                     "parameters": step.parameters,
                     "id": step.id,
-                } for step in (self._steps_iterator or self.steps)
+                } for step in steps
             }
         }
     

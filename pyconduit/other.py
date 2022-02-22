@@ -91,14 +91,16 @@ class ConduitIterator(Generic[T]):
     def __init__(self, items : List[T]):
         self._items = items or []
         self._seen_items = 0
-        self._added_items = 0
 
     def __iter__(self):
         return self
 
     def add_item(self, item : T):
-        self._items.insert(self._seen_items + self._added_items, item)
-        self._added_items += 1
+        self._items.insert(self._seen_items, item)
+
+    def add_items(self, items : List[T]):
+        for i, item in enumerate(items):
+            self._items.insert(self._seen_items + i, item)
 
     def __next__(self) -> T:
         self._seen_items += 1
@@ -106,7 +108,6 @@ class ConduitIterator(Generic[T]):
             return self._items[self._seen_items - 1]
         except IndexError:
             self._seen_items = 0
-            self._added_items = 0
             raise StopIteration
 
 

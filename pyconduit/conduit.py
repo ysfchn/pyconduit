@@ -86,6 +86,8 @@ class Conduit:
             blocks as "private", otherwise it will have no effect as "public" blocks are already available for all jobs.
         block_limit_overrides:
             If you want to override "max_uses" count of [`ConduitBlock`][pyconduit.block.ConduitBlock] objects only for this conduit, you can write block names and set a new limit.
+        debug:
+            If True, invalid blocks will be replaced with a debug block, and their parameters won't be enforced.
     """
 
     def __init__(
@@ -100,7 +102,8 @@ class Conduit:
         on_job_finish : Union[Coroutine, Callable, None] = None,
         step_limit : Optional[int] = None,
         block_limit_overrides : Dict[str, Optional[int]] = {},
-        blocks : List[ConduitBlock] = []
+        blocks : List[ConduitBlock] = [],
+        debug : bool = False
     ) -> None:
         """
         Args:
@@ -140,6 +143,8 @@ class Conduit:
             block_limit_overrides:
                 If you want to override "max_uses" count of ConduitBlock objects only for this conduit, 
                 you can write block names and set a new limit. You can also use "*" (wildcard) and "?" (question marks).
+            debug:
+                If True, invalid blocks will be replaced with a debug block, and their parameters won't be enforced.
         """
         self.id : Optional[str] = id
         self.name : Optional[str]  = name
@@ -170,6 +175,7 @@ class Conduit:
         self.variables : Dict[str, ConduitVariable] = {x : (y if isinstance(y, ConduitVariable) else ConduitVariable(y)) for x, y in variables.items()}
         self.block_limit_overrides : Dict[str, Optional[int]] = block_limit_overrides or {}
         self.blocks : List[ConduitBlock] = blocks or []
+        self.debug : bool = debug
         self._contexts : Dict[str, Any] = {}
         self._steps_iterator : Optional[ConduitIterator] = None
         self.update_contexts()
@@ -219,7 +225,8 @@ class Conduit:
             step_limit = data.get("step_limit"),
             on_step_update = data.get("on_step_update"),
             on_job_finish = data.get("on_job_finish"),
-            block_limit_overrides = data.get("block_limit_overrides", {})
+            block_limit_overrides = data.get("block_limit_overrides", {}),
+            debug = data.get("debug") or False
         )
         _conduit.load_step_list(data.get("steps", []))
         return _conduit

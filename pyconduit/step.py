@@ -34,6 +34,12 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from pyconduit import Conduit
 
+
+@ConduitBlock.make(private = True)
+def debug(**kwargs):
+    print(kwargs)
+
+
 class ConduitVariable(ObjectProxy):
     """
     A wrapper of `ObjectProxy` class which comes from [`wrapt`](https://github.com/GrahamDumpleton/wrapt) library.
@@ -45,6 +51,7 @@ class ConduitVariable(ObjectProxy):
 
 class ConduitStep:
     DEFAULT_ROUTE_NAME = "default"
+    DEBUG_BLOCK : ConduitBlock = debug
 
     """
     Represents a single step that is in the job.
@@ -170,7 +177,11 @@ class ConduitStep:
         Checks for errors and updates the step's status.
         """
         if not self.block:
-            self.status = ConduitStatus.BLOCK_NOT_FOUND
+            if not self.job.debug:
+                self.status = ConduitStatus.BLOCK_NOT_FOUND
+            else:
+                self.parameters["__block"] = self.block.display_name
+                self.block = ConduitStep.DEBUG_BLOCK
         elif self.is_id_duplicate:
             self.status = ConduitStatus.DUPLICATE_STEP_IDS
         elif not self.block.exists_tags(self.job.tags):

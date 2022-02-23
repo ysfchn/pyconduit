@@ -179,7 +179,7 @@ class ConduitStep:
 
     
     @property
-    def parent(self) -> Union[Conduit, "ConduitStep"]:
+    def parent(self) -> Union["Conduit", "ConduitStep"]:
         """
         Gets the parent of this step. If this step has added by a route,
         then this will be the upper step. Otherwise, this will return the job itself.

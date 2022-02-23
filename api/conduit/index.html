@@ -1,0 +1,1726 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.1">
+    
+    
+      
+        <title>Conduit - pyconduit</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.e8d9bf0c.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.e6a45f82.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../assets/styles.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pyconduit.conduit.Conduit" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="pyconduit" class="md-header__button md-logo" aria-label="pyconduit" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pyconduit
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Conduit
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ysfchn/pyconduit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pyconduit" class="md-nav__button md-logo" aria-label="pyconduit" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    pyconduit
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ysfchn/pyconduit/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quick_start/" class="md-nav__link">
+        Quick Start
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../defining_blocks/" class="md-nav__link">
+        Defining Blocks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../context_values/" class="md-nav__link">
+        Context Values
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../locals_variables_globals/" class="md-nav__link">
+        Locals, Variables & Globals
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../running_job/" class="md-nav__link">
+        Running Job
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_7" type="checkbox" id="__nav_7" >
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_7">
+          Blocks
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Blocks" data-md-level="1">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          Blocks
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/dictionary/" class="md-nav__link">
+        Dictionary
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/lists/" class="md-nav__link">
+        Lists
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/logic/" class="md-nav__link">
+        Logic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/math/" class="md-nav__link">
+        Math
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/object/" class="md-nav__link">
+        Object
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/text/" class="md-nav__link">
+        Text
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../blocks/variable/" class="md-nav__link">
+        Variable
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8" type="checkbox" id="__nav_8" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8">
+          API Documentation
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API Documentation" data-md-level="1">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          API Documentation
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Conduit
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Conduit
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.contexts" class="md-nav__link">
+    contexts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.running" class="md-nav__link">
+    running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.success" class="md-nav__link">
+    success
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.create_contexts" class="md-nav__link">
+    create_contexts()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.create_step" class="md-nav__link">
+    create_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.delete_step" class="md-nav__link">
+    delete_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.from_dict" class="md-nav__link">
+    from_dict()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.get_step" class="md-nav__link">
+    get_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.load_step_list" class="md-nav__link">
+    load_step_list()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.run" class="md-nav__link">
+    run()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.update_contexts" class="md-nav__link">
+    update_contexts()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../step/" class="md-nav__link">
+        ConduitStep
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../block/" class="md-nav__link">
+        ConduitBlock
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../category/" class="md-nav__link">
+        ConduitCategory
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../partial_block/" class="md-nav__link">
+        ConduitPartialBlock
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_8_6" type="checkbox" id="__nav_8_6" >
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_8_6">
+          Extras
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Extras" data-md-level="2">
+        <label class="md-nav__title" for="__nav_8_6">
+          <span class="md-nav__icon md-icon"></span>
+          Extras
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extras/utils/" class="md-nav__link">
+        Utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../extras/scoped_object/" class="md-nav__link">
+        ScopedObject
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="https://github.com/ysfchn/pyconduit/blob/main/LICENSE.md" class="md-nav__link">
+        License
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.contexts" class="md-nav__link">
+    contexts
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.running" class="md-nav__link">
+    running
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.success" class="md-nav__link">
+    success
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.create_contexts" class="md-nav__link">
+    create_contexts()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.create_step" class="md-nav__link">
+    create_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.delete_step" class="md-nav__link">
+    delete_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.from_dict" class="md-nav__link">
+    from_dict()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.get_step" class="md-nav__link">
+    get_step()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.load_step_list" class="md-nav__link">
+    load_step_list()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.run" class="md-nav__link">
+    run()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pyconduit.conduit.Conduit.update_contexts" class="md-nav__link">
+    update_contexts()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+<a href="https://github.com/ysfchn/pyconduit/edit/master/docs/api/conduit.md" title="Edit this page" class="md-content__button md-icon">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+</a>
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h1 class="doc doc-heading" id="pyconduit.conduit.Conduit">
+        <code>
+Conduit        </code>
+
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit" title="Permanent link">&para;</a></h1>
+
+    <div class="doc doc-contents first">
+
+      <p>Conduits are "job" objects that holds steps and executes them one by one. </p>
+<p>If you want to create a new job, just create a new instance of this <code>Conduit</code> object.
+To create new steps, use <code>create_step()</code> or initialize <code>ConduitStep</code> objects.
+Lastly, to execute all steps, call the <code>run()</code> coroutine. </p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>An ID that used to identify the job. It doesn't have any effect in code, so it doesn't matter which ID you passed.</p></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>A name that used to identify the job. It doesn't have any effect in code, so it doesn't matter which name you passed.</p></td>
+      </tr>
+      <tr>
+        <td><code>steps</code></td>
+        <td><code>List[ConduitStep]</code></td>
+        <td><p>List of <a href="../step/#pyconduit.step.ConduitStep"><code>ConduitStep</code></a> that added to this job.</p></td>
+      </tr>
+      <tr>
+        <td><code>tags</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>A list of tags that this job has. Tags can be useful to limit the availability to blocks. If you add a tag to a
+<a href="../block/#pyconduit.block.ConduitBlock"><code>ConduitBlock</code></a>, only jobs has the tag wil able to use that block. For example,
+if a block has "A" and "B" tags, then the job must have both "A" and "B" tags too (if job has extra tags such as "C",
+it doesn't affect the result of the tag checking operation), otherwise using that block will result in a <code>FORBIDDEN_BLOCK</code> status code.</p></td>
+      </tr>
+      <tr>
+        <td><code>variables</code></td>
+        <td><code>Dict[str, ConduitVariable]</code></td>
+        <td><p>A dictionary that contains the job variables. Variables can be set by client or server. They can be accessed 
+inside steps. Note that as these values can be read and edited with users, don't pass any sensitive information here.
+It is just for creating a temporary storage so user can add and edit any value that they wants.</p></td>
+      </tr>
+      <tr>
+        <td><code>local_values</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains the job parameters. These local values can be used to store any data that came from an
+any source. For example if this job has created automatically with one of your app's events, then you can pass the event
+data here, so users will able to access this value. It is like <code>variables</code>, however <code>local_values</code> is read only to users. </p></td>
+      </tr>
+      <tr>
+        <td><code>global_values</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains the job globals. Global values work same as <code>variables</code> and <code>local_values</code>, but globals can't be
+seen by users. Unlike <code>variables</code> and <code>local_values</code>, globals are passed as private function parameters. For example,
+if a block requires an object as parameter which can't be created by users (For example: You created a block that adds a value to your
+own app's database, so this operation will require a database instance object to call "write" method on it. 
+But it is impossible to provide a database instance object for user, so need to provide these objects as global value.)</p></td>
+      </tr>
+      <tr>
+        <td><code>on_step_update</code></td>
+        <td><code>Union[Coroutine, Callable, None]</code></td>
+        <td><p>A callable that will be executed when any step in this job has finished (fail or success).
+It will call the method with two parameters: the Conduit object itself, and step which is updated.</p></td>
+      </tr>
+      <tr>
+        <td><code>on_job_finish</code></td>
+        <td><code>Union[Coroutine, Callable, None]</code></td>
+        <td><p>A callable that will be executed when all steps in this job has finished (fail or success).
+It will call the method with two parameters: the Conduit object itself, and failed step. If there is no any failed step, then failed step will be None.</p></td>
+      </tr>
+      <tr>
+        <td><code>step_limit</code></td>
+        <td><code>Optional[int]</code></td>
+        <td><p>If you want to add a maximum number to the step count, you can set it here. Users will still able to create steps even if they
+exceed the limit, however when job has executed, it will exit with an code that says step limit has exceeded. <code>None</code> (which is default)
+means unlimited count of steps.</p></td>
+      </tr>
+      <tr>
+        <td><code>blocks</code></td>
+        <td><code>List[ConduitBlock]</code></td>
+        <td><p>A list of <a href="../block/#pyconduit.block.ConduitBlock"><code>ConduitBlock</code></a> objects that will be only available in this job. Make sure to register
+blocks as "private", otherwise it will have no effect as "public" blocks are already available for all jobs.</p></td>
+      </tr>
+      <tr>
+        <td><code>block_limit_overrides</code></td>
+        <td><code>Dict[str, Optional[int]]</code></td>
+        <td><p>If you want to override "max_uses" count of <a href="../block/#pyconduit.block.ConduitBlock"><code>ConduitBlock</code></a> objects only for this conduit, you can write block names and set a new limit.</p></td>
+      </tr>
+      <tr>
+        <td><code>debug</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, invalid blocks will be replaced with a debug block, and their parameters won't be enforced.</p></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+  <div class="doc doc-object doc-attribute">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.contexts">
+<code class="highlight language-python"><span class="n">contexts</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.contexts" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the contexts of the job. Contexts are values that can be seen and used by users. 
+Refer to <a href="../../context_values">Context Values</a> section to learn more about contexts.</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Dict[str, Any]</code></td>
+      <td><p>A dictionary that contains information about this job.</p></td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-attribute">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.running">
+<code class="highlight language-python"><span class="n">running</span><span class="p">:</span> <span class="nb">bool</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.running" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns True if job is currently running. Otherwise, False.</p>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-attribute">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.success">
+<code class="highlight language-python"><span class="n">success</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-property"><code>property</code></small>
+      <small class="doc doc-property doc-property-readonly"><code>readonly</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.success" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns a boolean about previous execution has exited without any errors.</p>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Optional[bool]</code></td>
+      <td><p><code>True</code> if previous execution has exited without any errors. 
+<code>False</code> if previous execution has exited with any errors.
+<code>None</code> if job has never executed yet. </p></td>
+    </tr>
+  </tbody>
+</table>    </div>
+
+  </div>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.__init__">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="p">[],</span> <span class="n">variables</span><span class="o">=</span><span class="p">{},</span> <span class="n">local_values</span><span class="o">=</span><span class="p">{},</span> <span class="n">global_values</span><span class="o">=</span><span class="p">{},</span> <span class="n">on_step_update</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">on_job_finish</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">step_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">block_limit_overrides</span><span class="o">=</span><span class="p">{},</span> <span class="n">blocks</span><span class="o">=</span><span class="p">[],</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.__init__" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>id</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>An ID that used to identify the job. It doesn't have any effect in code, so it doesn't matter which ID you passed.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>A name that used to identify the job. It doesn't have any effect in code, so it doesn't matter which name you passed.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>tags</code></td>
+        <td><code>List[str]</code></td>
+        <td><p>A list of tags that this job has. Tags can be useful to limit the availability to blocks. If you add a tag to a
+<a href="../block/#pyconduit.block.ConduitBlock"><code>ConduitBlock</code></a>, only jobs has the tag wil able to use that block. For example,
+if a block has "A" and "B" tags, then the job must have both "A" and "B" tags too (if job has extra tags such as "C",
+it doesn't affect the result of the tag checking operation), otherwise using that block will result in a <code>FORBIDDEN_BLOCK</code> status code.</p></td>
+        <td><code>[]</code></td>
+      </tr>
+      <tr>
+        <td><code>variables</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains the job variables. Variables can be set by client or server. They can be accessed 
+inside steps. Note that as these values can be read and edited with users, don't pass any sensitive information here.
+It is just for creating a temporary storage so user can add and edit any value that they wants.</p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>local_values</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains the job parameters. These local values can be used to store any data that came from an
+any source. For example if this job has created automatically with one of your app's events, then you can pass the event
+data here, so users will able to access this value. It is like <code>variables</code>, however <code>local_values</code> is read only to users. </p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>global_values</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains the job globals. Global values work same as <code>variables</code> and <code>local_values</code>, but globals can't be
+seen by users. Unlike <code>variables</code> and <code>local_values</code>, globals are passed as private function parameters. For example,
+if a block requires an object as parameter which can't be created by users (For example: You created a block that adds a value to your
+own app's database, so this operation will require a database instance object to call "write" method on it. 
+But it is impossible to provide a database instance object for user, so need to provide these objects as global value.)</p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>on_step_update</code></td>
+        <td><code>Union[Coroutine, Callable]</code></td>
+        <td><p>A callable that will be executed when any step in this job has finished (fail or success).
+It will call the method with two parameters: the Conduit object itself, and step which is updated.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>on_job_finish</code></td>
+        <td><code>Union[Coroutine, Callable]</code></td>
+        <td><p>A callable that will be executed when all steps in this job has finished (fail or success).
+It will call the method with two parameters: the Conduit object itself, and failed step. If there is no any failed step, then failed step will be None.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>step_limit</code></td>
+        <td><code>Optional[int]</code></td>
+        <td><p>If you want to add a maximum number to the step count, you can set it here. Users will still able to create steps even if they
+exceed the limit, however when job has executed, it will exit with an code that says step limit has exceeded. <code>None</code> (which is default)
+means unlimited count of steps.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>block_limit_overrides</code></td>
+        <td><code>Dict[str, Optional[int]]</code></td>
+        <td><p>If you want to override "max_uses" count of ConduitBlock objects only for this conduit, 
+you can write block names and set a new limit. You can also use "*" (wildcard) and "?" (question marks).</p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>debug</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, invalid blocks will be replaced with a debug block, and their parameters won't be enforced.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.create_contexts">
+<code class="highlight language-python"><span class="n">create_contexts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.create_contexts" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates and returns a dictionary of contexts.
+Refer to <a href="../../context_values">Context Values</a> section to learn more about contexts.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When running the job, this method will be called before executing every step any will be set as job contexts. 
+If you want to edit the contexts, you can create a custom class that inherits from Conduit class, 
+then override that method.</p>
+</div>
+
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Dict[str, Any]</code></td>
+      <td><p>A dictionary that contains information about this job.</p></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.create_step">
+<code class="highlight language-python"><span class="n">create_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{},</span> <span class="nb">id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">forced</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">if_condition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">attach</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ctx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">routes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">route_checks</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.create_step" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates a new step in this job then returns the created step (after adding it to job).</p>
+<p><code>action</code> is the name of the block along with category. For example, if <code>MATH.SUM</code> provided as <code>action</code>,
+It searches for a block named <code>sum</code> in the <code>Math</code> category. </p>
+<p>Refer to <a href="../block/#pyconduit.block.ConduitBlock.get"><code>ConduitBlock.get</code></a> about getting a block by its display name.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>action</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the block. </p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>parameters</code></td>
+        <td><code>dict</code></td>
+        <td><p>A dictionary of parameters that will be passed to this block as keyword parameters.</p></td>
+        <td><code>{}</code></td>
+      </tr>
+      <tr>
+        <td><code>id</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>An identifier for this step. It needs to be unique among all other steps in the job. If it is <code>None</code>, then
+the position of the step will be used as step ID.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>forced</code></td>
+        <td><code>bool</code></td>
+        <td><p>Specifies if this step must be executed even if one (or more) of the previous steps fails. Defaults to <code>False</code>.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>if_condition</code></td>
+        <td><code>Optional[Any]</code></td>
+        <td><p>A list or string of if conditions that contains context values. These conditions will be checked before block executing starts,
+so if one (or more) of conditions fails, then the step will not be executed.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>attach</code></td>
+        <td><code>Optional[bool]</code></td>
+        <td><p>If True, this step will be appended to given job's steps automatically. If False, this step won't be added to
+job. In this case you need to call <code>job.steps.append(step)</code> manually. Lastly, if None (which is default), this step will be
+automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>ctx</code></td>
+        <td><code>Optional[Dict[str, Any]]</code></td>
+        <td><p>Any extra value for this step.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>routes</code></td>
+        <td><code>Union[Dict[str, List[ConduitStep]], List[ConduitStep]]</code></td>
+        <td><p>Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
+current running job's steps.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>route_checks</code></td>
+        <td><code>Optional[Dict[str, Union[List[str], str]]]</code></td>
+        <td><p>A mapping of route names and conditions for enabling a route automatically.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>ConduitStep</code></td>
+      <td><p>The created step.</p></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.delete_step">
+<code class="highlight language-python"><span class="n">delete_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.delete_step" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Deletes a step from the job. </p>
+<p>This currently don't work for created steps in job runtime. </p>
+<p>If <code>step</code> parameter is <code>int</code>, then it looks for step positions (which starts from 1).
+If <code>step</code> parameter is <code>str</code>, then it looks for step IDs.</p>
+<p>Raises KeyError if step is not found and <code>silent</code> flag is set to False.
+Otherwise it does nothing when step is not found.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>step</code></td>
+        <td><code>Union[str, int]</code></td>
+        <td><p>The ID or position of the step that will be deleted.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>silent</code></td>
+        <td><code>bool</code></td>
+        <td><p>If set to <code>True</code>, it won't do anything when step is not found instead of raising an exception.</p></td>
+        <td><code>True</code></td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.from_dict">
+<code class="highlight language-python"><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-classmethod"><code>classmethod</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.from_dict" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates a new Conduit from dictionary.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>data</code></td>
+        <td><code>Dict[str, Any]</code></td>
+        <td><p>A dictionary that contains configuration for creating new Conduit.
+Available keys and values are same with <code>__init__</code> method.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>Conduit</code></td>
+      <td><p>Returns the created Conduit.</p></td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.get_step">
+<code class="highlight language-python"><span class="n">get_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.get_step" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Gets a step in the job.</p>
+<p>This currently don't work for created steps in job runtime. </p>
+<p>If <code>step</code> parameter is <code>int</code>, then it looks for step positions (which starts from 1).
+If <code>step</code> parameter is <code>str</code>, then it looks for step IDs.</p>
+<p>Raises KeyError if step is not found and <code>silent</code> flag is set to False.
+Otherwise it returns None when step is not found.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>step</code></td>
+        <td><code>Union[str, int]</code></td>
+        <td><p>The ID or position of the step that will be searched for.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>silent</code></td>
+        <td><code>bool</code></td>
+        <td><p>If set to <code>True</code>, it won't do anything when step is not found instead of raising an exception.</p></td>
+        <td><code>False</code></td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.load_step_list">
+<code class="highlight language-python"><span class="n">load_step_list</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.load_step_list" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Creates steps from a list that contains dictionary objects and adds to current job.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>steps</code></td>
+        <td><code>List[Dict[str, Any]]</code></td>
+        <td><p>List of dictionaries that contains step data. At least the <code>action</code> key is required
+in all dictionaries but it can include optional keys such as <code>parameters</code>, <code>id</code>, <code>forced</code> and <code>if</code>.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.run">
+<code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-async"><code>async</code></small>
+  </span>
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.run" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Executes all steps in this job one by one. If one of step fails, then next steps will be skipped unless
+their <code>forced</code> flag is set to <code>True</code>.</p>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>If you use <code>await</code> for <code>job.run()</code>, then this means no other jobs will be executed until current job finishes. 
+If that's the thing that you don't want, then you can use <a href="https://docs.python.org/3/library/asyncio.html" target="_blank"><code>asyncio</code></a> or alternatives for executing the <code>run()</code> method
+without <code>await</code>.</p>
+</div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h2 class="doc doc-heading" id="pyconduit.conduit.Conduit.update_contexts">
+<code class="highlight language-python"><span class="n">update_contexts</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a class="headerlink" href="#pyconduit.conduit.Conduit.update_contexts" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Gets the contexts from <a href="#pyconduit.conduit.Conduit.create_contexts"><code>create_contexts</code></a> and sets it to
+job's contexts attribute.</p>
+<p>Equivalent to:
+<div class="highlight"><pre><span></span><code><span class="n">job</span><span class="o">.</span><span class="n">_contexts</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">create_contexts</span><span class="p">()</span>
+</code></pre></div></p>
+
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../../blocks/variable/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Variable" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Variable
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../step/" class="md-footer__link md-footer__link--next" aria-label="Next: ConduitStep" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              ConduitStep
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/ysfchn/pyconduit" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.indexes", "navigation.instant"], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../assets/javascripts/workers/search.bd0b6b67.min.js"}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.8aa65030.min.js"></script>
+      
+    
+  </body>
+</html>

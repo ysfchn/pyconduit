@@ -508,6 +508,7 @@ class Conduit:
                         "category": step.block.category,
                         "name": step.block.name
                     },
+                    "ctx": step.ctx,
                     "parameters": step.parameters,
                     "id": step.id,
                 } for step in steps

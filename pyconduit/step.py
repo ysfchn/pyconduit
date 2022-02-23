@@ -91,7 +91,7 @@ class ConduitStep:
             job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
             automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
         ctx:
-            Any extra value for this step.
+            Any extra value for this step. This is exposed to users.
         routes:
             Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
             current running job's steps.
@@ -132,7 +132,7 @@ class ConduitStep:
                 job. In this case you need to call `job.steps.append(step)` manually. Lastly, if None (which is default), this step will be
                 automatically added to current running job's steps (instead of pre-run job steps). If job is not running, behaves same as True.
             ctx:
-                Any extra value for this step.
+                Any extra value for this step. This is exposed to users.
             routes:
                 Routes are inner steps that added under this step. When a route has activated, its inner steps are appended to
                 current running job's steps.

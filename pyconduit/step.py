@@ -107,7 +107,7 @@ class ConduitStep:
         id : Optional[str] = None,
         forced : bool = False,
         attach : Optional[bool] = None,
-        ctx : Optional[Any] = None,
+        ctx : Optional[Dict[str, Any]] = None,
         routes : Optional[Dict[str, List["ConduitStep"]]] = None,
         route_checks : Optional[Dict[str, Union[List[str], str]]] = None
     ) -> None:
@@ -150,7 +150,7 @@ class ConduitStep:
         self.return_value : Any = None
         self.parameters : Dict[str, Any] = parameters
         self.if_condition : Optional[Any] = if_condition
-        self.ctx : Optional[Any] = ctx
+        self.ctx : Dict[str, Any] = ctx or {}
         self.routes : Dict[str, List["ConduitStep"]] = routes or {}
         self.route_checks : Optional[Dict[str, Union[List[str], str]]] = route_checks
         self.refresh_status()
@@ -230,7 +230,7 @@ class ConduitStep:
         return params
 
 
-    def activate_router(self, name : Optional[str] = None) -> None:
+    def activate_router(self, name : Optional[str] = None, ctx : Optional[dict] = None, clone : bool = False) -> None:
         """
         Appends all steps to current running job in specified route name.
         """
@@ -239,7 +239,7 @@ class ConduitStep:
             raise KeyError(f"Route '{name}' couldn't found.")
         if not self.job.running:
             raise ValueError("A route can't be activated when job is not running.")
-        self.job._steps_iterator.add_items(self.routes[n])
+        self.job._steps_iterator.add_items(self.routes[n] if clone == False else list(self.routes[n]), lambda x: x.ctx.update(ctx or {}))
 
 
     @staticmethod

@@ -98,8 +98,10 @@ class ConduitIterator(Generic[T]):
     def add_item(self, item : T):
         self._items.insert(self._seen_items, item)
 
-    def add_items(self, items : List[T]):
+    def add_items(self, items : List[T], func : Optional[Callable[[T], None]] = None):
         for i, item in enumerate(items):
+            if func:
+                func(item)
             self._items.insert(self._seen_items + i, item)
 
     def __next__(self) -> T:

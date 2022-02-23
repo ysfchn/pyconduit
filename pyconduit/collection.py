@@ -108,14 +108,14 @@ class ExtendedDict(UserDict):
     """
     def find_all(self, func) -> List[Tuple[Any, Any]]:
         """
-        Returns all pairs that func((key, value)) is True.
+        Returns all pairs that func(key, value) is True.
         If func is None, then returns all pairs that True.
         """
         return list(((k, v) for k, v in self.data.items() if func(k, v)))
 
     def find_first(self, func) -> Optional[Tuple[Any, Any]]:
         """
-        Returns the first pair that func((key, value)) is True.
+        Returns the first pair that func(key, value) is True.
         If func is None, then returns the first pair that has a truthy value.
         """
         if func == None:

@@ -280,7 +280,7 @@ class Conduit:
         forced : bool = False, 
         if_condition : Optional[Any] = None,
         attach : Optional[bool] = None,
-        ctx : Optional[Any] = None,
+        ctx : Optional[Dict[str, Any]] = None,
         routes : Optional[Union[Dict[str, List["ConduitStep"]], List["ConduitStep"]]] = None,
         route_checks : Optional[Dict[str, Union[List[str], str]]] = None
     ) -> ConduitStep:
@@ -331,7 +331,7 @@ class Conduit:
         forced : bool = False, 
         if_condition : Optional[Any] = None,
         attach : Optional[bool] = None,
-        ctx : Optional[Any] = None,
+        ctx : Optional[Dict[str, Any]] = None,
         routes : Optional[Union[Dict[str, List["ConduitStep"]], List["ConduitStep"]]] = None,
         route_checks : Optional[Dict[str, Union[List[str], str]]] = None
     ) -> ConduitStep:

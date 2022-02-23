@@ -22,7 +22,7 @@
 
 __all__ = ["ConduitBlock"]
 
-from typing import Coroutine, List, Callable, Any, Dict, Optional, Union
+from typing import Coroutine, List, Callable, Any, Dict, Optional, Union, TYPE_CHECKING
 import inspect
 from pyconduit.utils import parse_display_name, pattern_match
 
@@ -31,6 +31,9 @@ try:
     from pydantic import validate_arguments
 except (ImportError, ModuleNotFoundError):
     validate_arguments = lambda x, **y: x
+
+if TYPE_CHECKING:
+    from pyconduit.step import ConduitStep
 
 
 class ConduitBlockBase:
@@ -270,27 +273,35 @@ class ConduitBlock(ConduitBlockBase):
         if not self.private:
             ConduitBlock.blocks[self.display_name] = self
 
+
     def __bool__(self) -> bool:
         return True
 
-    def __auto_params(self) -> List[str]:
-        """
-        Returns a list of parameter names that needs to be filled by the ConduitStep itself.
-        """
-        return [
-            key for key, value in self.parameters.items() if value.kind not in [inspect.Parameter.KEYWORD_ONLY, inspect.Parameter.VAR_KEYWORD]
-        ]
 
-
-    # TODO: Make better prefill arguments function
-    def prefill_arguments(self, job, **kwargs) -> List[Any]:
+    def prefill_arguments(self, step : "ConduitStep") -> List[Any]:
         """
-        Converts required keyword arguments to positional arguments and returns a list of parameters.
+        Loops over this block's positional parameter names and returns a list of
+        parameter values populated from job's global values.
 
         Returns:
-            List of positional arguments that will be passed in to the inner function.
+            A list of positional parameter that will be passed when executing this block.
         """
-        return [kwargs.get(y.replace("__", ""), None) if y.replace("__", "") != "job" else job for y in self.__auto_params()]
+        args = []
+        for k, v in self.parameters.items():
+            # Check if parameter is positional argument.
+            if v.kind in [inspect.Parameter.KEYWORD_ONLY, inspect.Parameter.VAR_KEYWORD]:
+                continue
+            name = k.replace("__", "")
+            # If positional parameter name is "job", pass the job itself.
+            if name == "job":
+                args.append(step.job)
+            # If positional parameter name is "step", pass the step.
+            elif name == "step":
+                args.append(step)
+            # Otherwise, get positional parameter from global values.
+            else:
+                args.append(step.job.global_values.get(name, None))
+        return args
 
     
     def exists_tags(self, tags : List[str]) -> bool:

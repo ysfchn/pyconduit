@@ -102,7 +102,7 @@ class ConduitStep:
         job : "Conduit", 
         block : Union[ConduitBlock, ConduitBlock._Partial], 
         parameters : dict = {}, 
-        if_condition : Union[str, List[str], None] = None, 
+        if_condition : Optional[Any] = None, 
         id : Optional[str] = None,
         forced : bool = False,
         attach : Optional[bool] = None,
@@ -148,7 +148,7 @@ class ConduitStep:
         self.status : ConduitStatus = ConduitStatus.NONE
         self.return_value : Any = None
         self.parameters : Dict[str, Any] = parameters
-        self.if_condition : Union[str, List[str], None] = if_condition
+        self.if_condition : Optional[Any] = if_condition
         self.ctx : Optional[Any] = ctx
         self.routes : Dict[str, List["ConduitStep"]] = routes or {}
         self.route_checks : Optional[Dict[str, Union[List[str], str]]] = route_checks
@@ -247,6 +247,18 @@ class ConduitStep:
 
 
     @staticmethod
+    def _parse_content_all_bool(data : dict, value : Any) -> bool:
+        """
+        Like `parse_content_all()` but returns a boolean value instead.
+        """
+        if isinstance(value, str):
+            return bool(ConduitStep._parse_context_string(data, value))
+        elif isinstance(value, list):
+            return all([ConduitStep._parse_content_all(data, x) for x in value])
+        return bool(value)
+
+
+    @staticmethod
     def _parse_context_string(data : dict, value : str) -> Any:
         """
         Parses a single context value.
@@ -300,10 +312,7 @@ class ConduitStep:
             `True` if all conditions has passed, `False` otherwise.
         """
         if self.if_condition != None:
-            if isinstance(self.if_condition, str):
-                return True if self._parse_content_all(self.job.contexts, self.if_condition) else False
-            else:
-                return all([self._parse_content_all(self.job.contexts, x) for x in self.if_condition])
+            return self._parse_content_all_bool(self.job.contexts, self.if_condition)
         return True
 
 
@@ -314,12 +323,8 @@ class ConduitStep:
         if self.route_checks == None:
             return None
         for k, v in self.route_checks.items():
-            if isinstance(v, str):
-                if self._parse_content_all(self.job.contexts, v):
-                    return k
-            else:
-                if all([self._parse_content_all(self.job.contexts, x) for x in v]):
-                    return k
+            if self._parse_content_all_bool(self.job.contexts, v):
+                return k
 
 
     def function(self) -> Union[Callable, Coroutine]:
@@ -332,14 +337,14 @@ class ConduitStep:
         if self.block.is_coroutine:
             async def run():
                 return await self.block.function(
-                    *self.block.prefill_arguments(self.job, **self.job.global_values), 
+                    *self.block.prefill_arguments(self), 
                     **self.resolve_references()
                 )
             return run
         else:
             def run():
                 return self.block.function(
-                    *self.block.prefill_arguments(self.job, **self.job.global_values), 
+                    *self.block.prefill_arguments(self), 
                     **self.resolve_references()
                 )
             return run

@@ -277,7 +277,7 @@ class Conduit:
         parameters : dict = {}, 
         id : Optional[str] = None, 
         forced : bool = False, 
-        if_condition : Union[str, List[str], None] = None,
+        if_condition : Optional[Any] = None,
         attach : Optional[bool] = None,
         ctx : Optional[Any] = None,
         routes : Optional[Union[Dict[str, List["ConduitStep"]], List["ConduitStep"]]] = None,

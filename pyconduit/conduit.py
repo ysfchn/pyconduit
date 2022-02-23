@@ -514,9 +514,9 @@ class Conduit:
             if self.success == None or item.forced:
                 try:
                     if item.status not in [ConduitStatus.DONE, ConduitStatus.NONE]:
-                        raise ConduitError(item.status, item)
+                        raise ConduitError(item.status)
                     elif not item.check_if_condition():
-                        raise ConduitError(ConduitStatus.IF_CONDITION_FAILED, item)
+                        raise ConduitError(ConduitStatus.IF_CONDITION_FAILED)
                     else:
                         route = item.get_valid_route()
                         if route:
@@ -536,7 +536,7 @@ class Conduit:
                     item.return_value = val
                 except ConduitError as act:
                     item.status = act.status
-                    item.return_value = act.text
+                    item.return_value = act.format_step(item)
                 except Exception as e:
                     item.status = ConduitStatus.UNHANDLED_EXCEPTION
                     item.return_value = e
@@ -547,7 +547,7 @@ class Conduit:
                     self._success = False
             else:
                 item.status = ConduitStatus.SKIPPED
-                item.return_value = ConduitError(item.status, item).text
+                item.return_value = ConduitError(item.status).format_step(item)
             # Run the listener if exists.
             if self.on_step_update:
                 if inspect.iscoroutinefunction(self.on_step_update):

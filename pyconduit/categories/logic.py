@@ -359,7 +359,7 @@ class Logic(ConduitCategory):
 
         _Added in v1.1_
         """
-        raise ConduitError(ConduitStatus.KILLED_MANUALLY, None)
+        raise ConduitError(ConduitStatus.KILLED_MANUALLY)
 
     
     @conduitblock.make

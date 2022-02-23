@@ -35,18 +35,18 @@ class ConduitError(Exception):
     ## ConduitError
     A custom exception for errors that occurs in Actions.
     """
-    def __init__(self, status : ConduitStatus, step : Optional["ConduitStep"] = None, *args): 
+    def __init__(self, status : ConduitStatus, *args): 
         self.status = status
-        self.step = step
-        super(ConduitError, self).__init__(status, step, *args)
+        super(ConduitError, self).__init__(status, *args)
 
     @property
     def text(self) -> str:
-        return f"{self.status.name} ({self.status.value})" + \
-            ("" if not self.step else \
-                f"\nStep: {self.step.id} (#{self.step.position})" + \
-                f"\nBlock: {self.step.block.display_name}"
-            )
+        return f"{self.status.name} ({self.status.value})"
+
+    def format_step(self, step : "ConduitStep"):
+        return \
+            self.text + "\n" + \
+            step.block.display_name
 
 
 class _ConduitProcess(Process):

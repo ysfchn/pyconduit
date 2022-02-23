@@ -59,8 +59,9 @@ class ConduitStep:
     Every step is connected to a specific function. When a step starts running, it executes the function internally.
     Steps also hold variables to track the execution progress of the function such as return values, statuses.
 
-    Steps can be created with `create_step()` in [`Conduit`][pyconduit.conduit.Conduit] objects, 
-    but you can create a this object manually by providing a existing `Conduit` object.
+    !!! warning "Warning"
+        Steps can be created with `create_step()` in [`Conduit`][pyconduit.conduit.Conduit] objects, 
+        it is not recommended to build a ConduitStep manually.
 
     Note:
         Creating a step with same ID is not allowed. However, you will not get any exception as steps are designed to
@@ -153,6 +154,11 @@ class ConduitStep:
         self.routes : Dict[str, List["ConduitStep"]] = routes or {}
         self.route_checks : Optional[Dict[str, Union[List[str], str]]] = route_checks
         self.refresh_status()
+        self._attach_step(attach)
+        self._parent : Optional["ConduitStep"] = None
+
+
+    def _attach_step(self, attach : Optional[bool] = None) -> None:
         if (attach == None) and (self.job.running):
             self.job._steps_iterator.add_item(self)
         elif attach == False:
@@ -170,6 +176,15 @@ class ConduitStep:
             An integer which represents the position index.
         """
         return self._position
+
+    
+    @property
+    def parent(self) -> Union[Conduit, "ConduitStep"]:
+        """
+        Gets the parent of this step. If this step has added by a route,
+        then this will be the upper step. Otherwise, this will return the job itself.
+        """
+        return self._parent or self.job
 
     
     def refresh_status(self) -> None:

@@ -270,6 +270,58 @@ class Conduit:
             return False, _limit
         return _usage > _limit, _limit
 
+    
+    @staticmethod
+    def _new_step(
+        parent : Union[ConduitStep, "Conduit"],
+        action : str, 
+        parameters : dict = {}, 
+        id : Optional[str] = None, 
+        forced : bool = False, 
+        if_condition : Optional[Any] = None,
+        attach : Optional[bool] = None,
+        ctx : Optional[Any] = None,
+        routes : Optional[Union[Dict[str, List["ConduitStep"]], List["ConduitStep"]]] = None,
+        route_checks : Optional[Dict[str, Union[List[str], str]]] = None
+    ) -> ConduitStep:
+        _routes = \
+            {} if not routes else \
+            { ConduitStep.DEFAULT_ROUTE_NAME : routes } if isinstance(routes, list) else \
+            routes
+        _job = parent if isinstance(parent, Conduit) else parent.job
+        _step = ConduitStep(
+            job = _job, 
+            block = ConduitBlock.get(action) or _job._get_block(action), 
+            parameters = parameters, 
+            id = id, 
+            forced = forced, 
+            if_condition = if_condition,
+            attach = False,
+            ctx = ctx,
+            routes = {},
+            route_checks = route_checks
+        )
+        _step._parent = parent
+        _step.routes = {
+            k : [
+                Conduit._new_step(
+                    parent = _step,
+                    action = step["action"],
+                    parameters = step.get("parameters", {}),
+                    id = step.get("id"),
+                    forced = step.get("forced", False),
+                    if_condition = step.get("if"),
+                    attach = False,
+                    ctx = step.get("ctx"),
+                    routes = step.get("routes"),
+                    route_checks = step.get("route_checks")
+                ) for step in v
+            ] for k, v in _routes.items() 
+        }
+        _step._attach_step(attach)
+        return _step
+
+
 
     def create_step(
         self, 
@@ -319,35 +371,18 @@ class Conduit:
         Returns:
             The created step.
         """
-        _routes = \
-            {} if not routes else \
-            { ConduitStep.DEFAULT_ROUTE_NAME : routes } if isinstance(routes, list) else \
-            routes
-        _step = ConduitStep(
-            job = self, 
-            block = ConduitBlock.get(action) or self._get_block(action), 
+        return self._new_step(
+            self,
+            action = action, 
             parameters = parameters, 
             id = id, 
             forced = forced, 
             if_condition = if_condition,
             attach = attach,
             ctx = ctx,
-            routes = { k : [
-                self.create_step(
-                    step["action"],
-                    parameters = step.get("parameters", {}),
-                    id = step.get("id"),
-                    forced = step.get("forced", False),
-                    if_condition = step.get("if"),
-                    attach = False,
-                    ctx = step.get("ctx"),
-                    routes = step.get("routes"),
-                    route_checks = step.get("route_checks") 
-                ) for step in v
-            ] for k, v in _routes.items() },
+            routes = routes,
             route_checks = route_checks
         )
-        return _step
 
     
     def _get_block(

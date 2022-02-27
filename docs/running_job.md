@@ -19,8 +19,6 @@ Before Conduit executes the underlying function, it performs several checks to v
 | DUPLICATE_STEP_IDS | 104 | | Duplicate step IDs has detected. |
 | FORBIDDEN_BLOCK | 105 | | This block is forbidden to use because of missing tags in the job. |
 | INVALID_TYPE | 107 | | Returned if user passed a type of value that doesn't match with the parameter type. If pydantic has not installed, then this will not be used as there will be no type validation without pydantic. |
-| STEP_LIMIT_EXCEED | 108 | | Step limit has been exceed. |
-| BLOCK_LIMIT_EXCEED | 109 | | Block limit has been exceed. |
 | IF_CONDITION_FAILED | 110 | | `if_condition` of the step returned `False`. |
 | KILLED_MANUALLY | 111 | ✅ | An exception raised manually to stop the job. |
 

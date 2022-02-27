@@ -25,7 +25,7 @@ job = Conduit(global_values = {
 After defining the global values, you can get these values in the ConduitBlocks by adding their names before keyword-only arguments.
 
 ```py
-@ConduitBlock.make
+@block
 def create_feedback(contact_url : str, *, message : str):
     """
     Posts a message to the contact url.
@@ -38,7 +38,7 @@ def create_feedback(contact_url : str, *, message : str):
 You can add double underscores to positional parameters if you want users to use `contact_url` in their payloads too. You don't need to add underscores too in `global_values` because underscores will be deleted already.
 
 ```py
-@ConduitBlock.make
+@block
 def create_feedback(contact_url__ : str, *, contact_url : str = None):
     """
     Posts a message to the contact url. If user passed their own contact urls,

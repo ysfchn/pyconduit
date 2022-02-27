@@ -35,16 +35,8 @@ class ConduitStatus(Enum):
     UNHANDLED_EXCEPTION = 101
     # This action can't found.
     BLOCK_NOT_FOUND = 102
-    # Duplicate step IDs has detected.
-    DUPLICATE_STEP_IDS = 104
-    # This block is forbidden to use.
-    FORBIDDEN_BLOCK = 105
     # Pydantic validation errors.
     INVALID_TYPE = 107
-    # Step limit has been exceed.
-    STEP_LIMIT_EXCEED = 108
-    # Block limit has been exceed.
-    BLOCK_LIMIT_EXCEED = 109
     # If condition failed.
     IF_CONDITION_FAILED = 110
     # Invalid argument has provided for function.

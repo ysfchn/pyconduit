@@ -43,7 +43,6 @@ class Job(NodeBase):
         global_values : Optional[dict] = {},
         on_step_update : Union[Callable, None] = None,
         on_job_finish : Union[Callable, None] = None,
-        step_limit : Optional[int] = None,
         block_limit_overrides : Optional[Dict[str, Optional[int]]] = None,
         debug : bool = False,
         ctx : Optional[dict] = None
@@ -55,7 +54,6 @@ class Job(NodeBase):
         self.global_values = global_values or {}
         self.on_step_update = on_step_update
         self.on_job_finish = on_job_finish
-        self.step_limit = step_limit
         self.block_limit_overrides = block_limit_overrides or {}
         self.debug = debug
         self.ctx = ctx or {}
@@ -103,6 +101,8 @@ class Job(NodeBase):
             if self.success == None or node.forced:
                 try:
                     func = node.get_function()
+                    if not func:
+                        raise ConduitError(ConduitStatus.BLOCK_NOT_FOUND)
                     if node.status not in [ConduitStatus.DONE, ConduitStatus.NONE]:
                         raise ConduitError(node.status)
                     elif not node.check_if_condition():

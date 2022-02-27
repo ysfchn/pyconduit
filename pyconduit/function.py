@@ -153,7 +153,7 @@ class FunctionStore:
                 args.append(step)
             # Otherwise, get positional parameter from global values.
             else:
-                args.append(step.job.global_values.get(name, None))
+                args.append(step.job.global_values.get(name))
         return args
 
     def __bool__(self) -> bool:

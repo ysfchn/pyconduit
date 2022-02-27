@@ -24,7 +24,7 @@ class Math(ConduitCategory):
 """
 Some useful math functions.
 """
-    @conduitblock.make
+    @block
     def sum_number(*, value1 : int, value2 : int) -> int:
         """
         Return the sum of two numbers.
@@ -36,7 +36,7 @@ Some useful math functions.
     Whenever we want to get this block object, we will only need the its category name and block name. ConduitBlocks will always uppercase the category name and block name, so you can search for a block name with case insensitively.
     In this case: `MATH.SUM_NUMBER`
 
-    `@ConduitBlock.make` decorator registers the function as `ConduitBlock`. And note that ConduitBlocks are always static method even if they are in the class. Because `ConduitBlock` objects are designed to be independent, so when you search for a `MATH.SUM_NUMBER` block, you will directly get the block without needing to creating a instance of `Math` category.
+    `@block` decorator registers the function as `ConduitBlock`. And note that ConduitBlocks are always static method even if they are in the class. Because `ConduitBlock` objects are designed to be independent, so when you search for a `MATH.SUM_NUMBER` block, you will directly get the block without needing to creating a instance of `Math` category.
 
 Now users will able to call this method by just proving the block name and parameters, you need to just load their data and it is now ready to be executed.
 
@@ -45,7 +45,7 @@ from pyconduit import Conduit, ConduitCategory
 from pyconduit import ConduitBlock as conduitblock
 
 class MyMath(ConduitCategory):
-    @conduitblock.make
+    @block
     def sum_number(*, value1 : int, value2 : int) -> int:
         return value1 + value2
 
@@ -76,7 +76,7 @@ Keyword-only and keyword-variable (**kwargs) parameters means that parameter mus
 Positional-only and positional-or-keyword parameters means they will be filled by server-side with global values. It is used for private values such as database objects. Users can't able to fill these positional parameters even if they provided their parameter name and value.
 
 ```py
-@conduitblock.make
+@block
 def get_user(database__, *, name : str) -> dict:
     return database__.get(name)
 

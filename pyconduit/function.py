@@ -25,8 +25,8 @@ __all__ = ["FunctionStore"]
 from functools import partial
 from typing import Coroutine, List, Callable, Any, Dict, Optional, Union, Protocol, runtime_checkable, TYPE_CHECKING
 import inspect
-from pyconduit2.node import Node
-from pyconduit2.utils import parse_name, make_name, pattern_match
+from pyconduit.node import Node
+from pyconduit.utils import parse_name, make_name, pattern_match
 
 # If pydantic is available, use pydantic's validate arguments function.
 try:

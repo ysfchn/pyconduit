@@ -21,15 +21,15 @@
 # SOFTWARE.
 
 from typing import Any, Dict, Generic, List, Optional, TypeVar, TYPE_CHECKING
-from pyconduit2.enums import ConduitStatus
-from pyconduit2.function import FunctionStore, FunctionProtocol
-from pyconduit2.utils import make_name
+from pyconduit.enums import ConduitStatus
+from pyconduit.function import FunctionStore, FunctionProtocol
+from pyconduit.utils import make_name
 from wrapt.wrappers import ObjectProxy
 
 T = TypeVar('T')
 
 if TYPE_CHECKING:
-    from pyconduit2.node import Node
+    from pyconduit.node import Node
 
 class _Empty:
     pass

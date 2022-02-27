@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, Optional
-from pyconduit2 import Category, block
+from pyconduit import Category, block
 import copy
 
 # OBJECT

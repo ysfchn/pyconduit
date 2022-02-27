@@ -32,8 +32,8 @@ __all__ = [
     "EMPTY"
 ]
 
-from pyconduit2.enums import ConduitStatus
-from pyconduit2.base import Category, ConduitError, ConduitVariable, EMPTY
-from pyconduit2.function import block, FunctionStore
-from pyconduit2.job import Job
-from pyconduit2.node import Node
+from pyconduit.enums import ConduitStatus
+from pyconduit.base import Category, ConduitError, ConduitVariable, EMPTY
+from pyconduit.function import block, FunctionStore
+from pyconduit.job import Job
+from pyconduit.node import Node

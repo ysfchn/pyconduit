@@ -22,9 +22,9 @@
 
 import inspect
 from typing import Callable, Dict, Optional, Union, List, Any
-from pyconduit2.node import Node
-from pyconduit2.base import ConduitError, NodeBase, NodeIterator
-from pyconduit2.enums import ConduitStatus
+from pyconduit.node import Node
+from pyconduit.base import ConduitError, NodeBase, NodeIterator
+from pyconduit.enums import ConduitStatus
 
 try:
     from pydantic import ValidationError

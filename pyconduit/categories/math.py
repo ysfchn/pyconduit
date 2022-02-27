@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, List, Union
-from pyconduit2 import Category, block
+from pyconduit import Category, block
 import math
 from pydantic import confloat
 import operator as op

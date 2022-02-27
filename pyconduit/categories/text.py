@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, List, Optional
-from pyconduit2 import Category, block
+from pyconduit import Category, block
 
 # TEXT
 # Contains blocks to manipulate texts.

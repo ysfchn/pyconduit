@@ -22,7 +22,7 @@
 
 from typing import Any
 from enum import Enum
-from pyconduit2 import Category, block, ConduitStatus, ConduitError
+from pyconduit import Category, block, ConduitStatus, ConduitError
 import operator as op
 
 class LogicalOperators(str, Enum):

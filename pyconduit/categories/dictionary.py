@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, Dict, List, Union, Tuple
-from pyconduit2 import Category, block, ConduitVariable, EMPTY
+from pyconduit import Category, block, ConduitVariable, EMPTY
 
 # DICTIONARY
 # Contains blocks to work with dictionaries.

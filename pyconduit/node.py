@@ -21,14 +21,14 @@
 # SOFTWARE.
 
 from typing import Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING, get_args, get_origin
-from pyconduit2.enums import ConduitStatus
-from pyconduit2.base import ConduitVariable, NodeBase, NodeIterator
-from pyconduit2.utils import upper, get_key_path
-from pyconduit2.function import FunctionProtocol, FunctionStore
+from pyconduit.enums import ConduitStatus
+from pyconduit.base import ConduitVariable, NodeBase, NodeIterator
+from pyconduit.utils import upper, get_key_path
+from pyconduit.function import FunctionProtocol, FunctionStore
 import re
 
 if TYPE_CHECKING:
-    from pyconduit2.job import Job
+    from pyconduit.job import Job
 
 
 class Node(NodeBase):

@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, List, Optional, Union
-from pyconduit2 import Category, block, ConduitVariable, EMPTY
+from pyconduit import Category, block, ConduitVariable, EMPTY
 import random
 
 # Lists

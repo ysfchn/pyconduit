@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyconduit2 import Category, block, Job, ConduitVariable, EMPTY
+from pyconduit import Category, block, Job, ConduitVariable, EMPTY
 from typing import Any, List
 
 # VARIABLE

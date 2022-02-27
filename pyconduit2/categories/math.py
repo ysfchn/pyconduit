@@ -21,20 +21,19 @@
 # SOFTWARE.
 
 from typing import Any, List, Union
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
+from pyconduit2 import Category, block
 import math
 from pydantic import confloat
 import operator as op
 
 # MATH
 # Contains blocks to interact with numbers.
-class Math(ConduitCategory):
+class Math(Category):
     """
     Contains blocks to interact with numbers.
     """
 
-    @conduitblock.make
+    @block
     def create_integer(*, value : Any) -> int:
         """
         Convert a value to an integer.
@@ -46,7 +45,7 @@ class Math(ConduitCategory):
         return int(value)
 
     
-    @conduitblock.make
+    @block
     def create_float(*, value : Any) -> float:
         """
         Convert a value to a float.
@@ -58,7 +57,7 @@ class Math(ConduitCategory):
         return float(value)
 
 
-    @conduitblock.make(name = "sum")
+    @block(label = "sum")
     def sum_(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the sum of two numbers.
@@ -72,7 +71,7 @@ class Math(ConduitCategory):
         return value1 + value2
 
 
-    @conduitblock.make
+    @block
     def sum_list(*, list : List[Any], start : Union[int, float] = 0) -> Union[int, float]:
         """
         Return the sum of a 'start' value (default: 0) plus an list of numbers.
@@ -85,7 +84,7 @@ class Math(ConduitCategory):
         return sum(list, start)
 
 
-    @conduitblock.make
+    @block
     def sub(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the subtraction of two numbers.
@@ -99,7 +98,7 @@ class Math(ConduitCategory):
         return value1 - value2
 
 
-    @conduitblock.make
+    @block
     def div(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the division of two numbers.
@@ -113,7 +112,7 @@ class Math(ConduitCategory):
         return value1 / value2
 
 
-    @conduitblock.make
+    @block
     def mul(*, value1 : confloat(le = 1000), value2 : confloat(le = 1000)) -> Union[int, float]:
         """
         Return the multiplication of two numbers.
@@ -127,7 +126,7 @@ class Math(ConduitCategory):
         return value1 * value2
 
 
-    @conduitblock.make
+    @block
     def exp(*, value1 : confloat(le = 10), value2 : confloat(le = 10)) -> Union[int, float]:
         """
         Returns the value of x to the power of y.
@@ -141,7 +140,7 @@ class Math(ConduitCategory):
         return value1 ** value2
 
 
-    @conduitblock.make
+    @block
     def mod(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Performs a division and then returns the remainder of the division.
@@ -155,7 +154,7 @@ class Math(ConduitCategory):
         return value1 % value2
 
     
-    @conduitblock.make
+    @block
     def floor(*, value : Union[int, float]) -> int:
         """
         Returns the greatest integer that's less than or equal to the given number.
@@ -167,7 +166,7 @@ class Math(ConduitCategory):
         return math.floor(value)
 
     
-    @conduitblock.make
+    @block
     def ceiling(*, value : Union[int, float]) -> int:
         """
         Returns the smallest integer that's greater than or equal to the given number.
@@ -179,7 +178,7 @@ class Math(ConduitCategory):
         return math.ceil(value)
 
 
-    @conduitblock.make(name = "max")
+    @block(label = "max")
     def max_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the largest value from two values.
@@ -193,7 +192,7 @@ class Math(ConduitCategory):
         return max(value1, value2)
 
     
-    @conduitblock.make
+    @block
     def sqrt(*, value : Union[int, float]) -> Union[int, float]:
         """
         Returns the square root of the given number.
@@ -205,7 +204,7 @@ class Math(ConduitCategory):
         return math.sqrt(value)
 
     
-    @conduitblock.make(name = "abs")
+    @block(label = "abs")
     def abs_(*, value : Any) -> Any:
         """
         Return the absolute value of the argument.
@@ -217,7 +216,7 @@ class Math(ConduitCategory):
         return op.abs(value)
 
 
-    @conduitblock.make
+    @block
     def max_list(*, list : List[Any]) -> Any:
         """
         Return the largest value from a list.
@@ -229,7 +228,7 @@ class Math(ConduitCategory):
         return max(list)
 
 
-    @conduitblock.make(name = "min")
+    @block(label = "min")
     def min_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the smallest value from two items.
@@ -243,7 +242,7 @@ class Math(ConduitCategory):
         return min(value1, value2)
     
 
-    @conduitblock.make
+    @block
     def min_list(*, list : List[Any]) -> Any:
         """
         Return the smallest value from a list.

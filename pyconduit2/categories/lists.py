@@ -21,20 +21,17 @@
 # SOFTWARE.
 
 from typing import Any, List, Optional, Union
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
-from pyconduit.step import ConduitVariable
-from pyconduit.other import EMPTY
+from pyconduit2 import Category, block, ConduitVariable, EMPTY
 import random
 
 # Lists
 # Contains blocks to interact with lists.
-class Lists(ConduitCategory):
+class Lists(Category):
     """
     Contains blocks to interact with lists.
     """
 
-    @conduitblock.make
+    @block
     def create(*, value1 : Any = EMPTY, value2 : Any = EMPTY) -> List[Any]:
         """
         Creates a new list with items. If items are not provided, then returns an empty list.
@@ -48,7 +45,7 @@ class Lists(ConduitCategory):
         return [x for x in [value1, value2] if x != EMPTY]
 
     
-    @conduitblock.make
+    @block
     def count(*, list : Union[List[Any], ConduitVariable]) -> int:
         """
         Counts the elements in a list.
@@ -60,7 +57,7 @@ class Lists(ConduitCategory):
         return len(list)
 
     
-    @conduitblock.make
+    @block
     def append(*, item : Any, list : Union[List[Any], ConduitVariable]) -> None:
         """
         Add item to the end of the list.
@@ -74,7 +71,7 @@ class Lists(ConduitCategory):
         return list.append(item)
 
     
-    @conduitblock.make
+    @block
     def includes(*, item : Any, list : Union[List[Any], ConduitVariable]) -> bool:
         """
         Checks if item in the list.
@@ -90,7 +87,7 @@ class Lists(ConduitCategory):
         return item in list
 
     
-    @conduitblock.make
+    @block
     def includes_any(*, items : Union[List[Any], ConduitVariable], list : Union[List[Any], ConduitVariable]) -> bool:
         """
         Checks if one of the items in the list.
@@ -106,7 +103,7 @@ class Lists(ConduitCategory):
         return any([x in list for x in items])
 
     
-    @conduitblock.make
+    @block
     def includes_all(*, items : Union[List[Any], ConduitVariable], list : Union[List[Any], ConduitVariable]) -> bool:
         """
         Checks if all of the items in the list.
@@ -122,7 +119,7 @@ class Lists(ConduitCategory):
         return all([x in list for x in items])
 
     
-    @conduitblock.make
+    @block
     def clear(*, list : Union[List[Any], ConduitVariable]) -> None:
         """
         Remove all items from list.
@@ -134,7 +131,7 @@ class Lists(ConduitCategory):
         list.clear()
 
     
-    @conduitblock.make
+    @block
     def extend(*, list1 : Union[List[Any], ConduitVariable], list2 : Union[List[Any], ConduitVariable]) -> None:
         """
         Extend list by appending elements from the `list2`. `list2` will not be modified but `list1` will be.
@@ -148,7 +145,7 @@ class Lists(ConduitCategory):
         list1.extend(list2)
 
     
-    @conduitblock.make
+    @block
     def sort(*, list : Union[List[Any], ConduitVariable], reverse : bool = False) -> None:
         """
         Sort list in place.
@@ -162,7 +159,7 @@ class Lists(ConduitCategory):
         list.sort(key = None, reverse = reverse)
     
 
-    @conduitblock.make
+    @block
     def insert(*, list : Union[List[Any], ConduitVariable], index : int, item : Any) -> None:
         """
         Insert object before index.
@@ -178,7 +175,7 @@ class Lists(ConduitCategory):
         list.insert(index, item)
 
     
-    @conduitblock.make
+    @block
     def copy(*, list : Union[List[Any], ConduitVariable]) -> List[Any]:
         """
         Return a shallow copy of the list.
@@ -190,7 +187,7 @@ class Lists(ConduitCategory):
         return list.copy()
 
     
-    @conduitblock.make
+    @block
     def remove(*, item : Any, list : Union[List[Any], ConduitVariable]) -> None:
         """
         Remove a item from list.
@@ -204,7 +201,7 @@ class Lists(ConduitCategory):
         list.remove(item)
 
     
-    @conduitblock.make
+    @block
     def pop(*, list : Union[List[Any], ConduitVariable], index : Optional[int] = None) -> Any:
         """
         Remove and return item at index (default last).
@@ -218,7 +215,7 @@ class Lists(ConduitCategory):
         return list.pop(index)
 
     
-    @conduitblock.make
+    @block
     def reverse(*, list : Union[List[Any], ConduitVariable]) -> None:
         """
         Reverses the list in place.
@@ -230,7 +227,7 @@ class Lists(ConduitCategory):
         list.reverse()
 
     
-    @conduitblock.make
+    @block
     def count_item(*, item : Any, list : Union[List[Any], ConduitVariable]) -> List[Any]:
         """
         Return number of occurrences of value.
@@ -244,7 +241,7 @@ class Lists(ConduitCategory):
         return list.count(item)
 
     
-    @conduitblock.make
+    @block
     def merge(*, list1 : Union[List[Any], ConduitVariable], list2 : Union[List[Any], ConduitVariable]) -> List[Any]:
         """
         Merge the two lists.
@@ -258,7 +255,7 @@ class Lists(ConduitCategory):
         return [*list1, *list2]
 
 
-    @conduitblock.make
+    @block
     def flatten(*, values : Union[List[Any], ConduitVariable]) -> List[Any]:
         """
         Moves the inner lists' items to the root of the list. Only one depth is supported.
@@ -276,7 +273,7 @@ class Lists(ConduitCategory):
         return items
 
 
-    @conduitblock.make
+    @block
     def get(*, list : Union[List[Any], ConduitVariable], index : int) -> Any:
         """
         Return the item in the position.
@@ -290,7 +287,7 @@ class Lists(ConduitCategory):
         return list[index]
 
     
-    @conduitblock.make
+    @block
     def random(*, list : Union[List[Any], ConduitVariable]) -> Any:
         """
         Gets a random item from the list. 
@@ -307,7 +304,7 @@ class Lists(ConduitCategory):
         return random.choice(list)
 
     
-    @conduitblock.make
+    @block
     def index(*, list : Union[List[Any], ConduitVariable], item : Any) -> int:
         """
         Return the index of the item. Returns -1 if item is not found.

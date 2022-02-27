@@ -29,7 +29,7 @@ The `action` key is the name of the function that will be called. And `parameter
 By default, when creating a new ConduitBlock, its name will be equal to the function name. However, you can set a custom name by setting `name` parameter. Also, providing a custom name allows you to use Python's reserved words.
 
 ```py
-@ConduitBlock.make(name = "do_nothing")
+@ConduitBlock.make(label = "do_nothing")
 def a_simple_block():
     """
     Add some code here

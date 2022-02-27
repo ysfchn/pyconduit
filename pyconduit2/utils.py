@@ -1,6 +1,6 @@
 # MIT License
 # 
-# Copyright (c) 2021 Yusuf Cihan
+# Copyright (c) 2022 Yusuf Cihan
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,38 +20,44 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-__all__ = [
-    "pattern_match", 
-    "parse_display_name", 
-    "parse_slice", 
-    "get_key_path",
-    "validate_annotations"
-]
-
-from typing import (
-    Tuple,
-    Optional,
-    Any,
-    Union,
-    Dict,
-    Type
-)
 import re
-from pyconduit.enums import ConduitStatus
-from pyconduit.other import ConduitError, ScopedObject
+from typing import Any, Optional, Tuple, Union
+
+FROM_CHARS = "ıi"
+TO_CHARS   = "II"
 
 
-try:
-    from pydantic import create_model, ValidationError
-except (ImportError, ModuleNotFoundError):
-    create_model = None
+def upper(text : str) -> str:
+    """
+    Convert text to uppercase (with handling Turkish characters correctly.)
+    """
+    t = text.maketrans(FROM_CHARS, TO_CHARS)
+    return text.strip().strip("/<>\\#@").replace("'", "").replace('"', "").translate(t).upper()
+
+
+def make_name(name : str, category : Optional[str] = None) -> str:
+    """
+    Create display name from category and name.
+    """
+    if ("." in name) or ("." in (category or "")):
+        raise ValueError("Name or category can't contain (.) dots.")
+    if not category:
+        return upper(name)
+    return ".".join([upper(name), upper(category)])
+
+
+def parse_name(value : str) -> Tuple[str, Optional[str]]:
+    """
+    Parse category and name from a display name. 
+    """
+    name, *category = upper(value).split(".", 1)
+    return (name, "".join(category) or None, )
 
 
 def pattern_match(item : str, pattern : str, strict : bool = True) -> bool:
     """
     Check if item matches with the pattern that contains 
     "*" wildcards and "?" question marks.
-
     Args:
         item:
             The string that pattern will be applied to.
@@ -71,30 +77,9 @@ def pattern_match(item : str, pattern : str, strict : bool = True) -> bool:
     return bool(_match)
 
 
-def parse_display_name(name : str) -> Tuple[Optional[str], str]:
-    """
-    Splits the display name into two item tuple which represents
-    category and block name.
-
-    Args:
-        name:
-            Any string that represents the block display name.
-    
-    Returns:
-        A two item tuple: first item is for category and
-        second one is for block name. Category can be None if name doesn't contain
-        any "." (dot) character.
-    """
-    _parts = name.split(".")
-    if len(_parts) == 1:
-        return (None, _parts[0])
-    return (_parts[0], ".".join(_parts[1:]))
-
-
 def parse_slice(value : str) -> Optional[slice]:
     """
     Parses a `slice()` from string, like `start:stop:step`.
-
     Args:
         value:
             A string value that contains the slice string. For example: `start:stop:step`.
@@ -109,59 +94,27 @@ def parse_slice(value : str) -> Optional[slice]:
         return None
 
 
-def get_key_path(obj : Union[dict, list, ScopedObject, str], key : str) -> Any:
+def get_key_path(obj : Union[dict, list, str], key : str) -> Any:
     """
     Gets a key from dict or value from list with dotted key path. It can also read attributes of object
     if object is wrapped in the [`ScopedObject`][pyconduit.other.ScopedObject].
-
     It raises KeyError if key starts with or ends with underscore to prevent unwanted access in runtime.
-
     Args:
         obj:
             A dictionary, list or [`ScopedObject`][pyconduit.other.ScopedObject].
         key:
             List of keys joined with "." (dots).
-
     Returns:
         The final value.
     """
     current_value = obj
-    try:
-        for item in key.split("."):
-            if item.startswith("__") or item.endswith("__") or item.startswith("_") or item.endswith("_"):
-                current_value = None
-            elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
-                current_value = current_value[int(item)]
-            elif isinstance(current_value, (list, str)) and parse_slice(item) != None:
-                current_value = current_value[parse_slice(item)]
-            elif isinstance(current_value, ScopedObject):
-                current_value = getattr(current_value, item)
-            elif isinstance(current_value, dict):
-                current_value = current_value[item]
-    # If context value is not found, return None.
-    # Maybe it can be replaced to raising ConduitError in the future.
-    except (KeyError, IndexError):
-        return
+    for item in key.split("."):
+        if item.startswith("__") or item.endswith("__") or item.startswith("_") or item.endswith("_"):
+            raise KeyError(item)
+        elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
+            current_value = current_value[int(item)]
+        elif isinstance(current_value, (list, str)) and parse_slice(item) != None:
+            current_value = current_value[parse_slice(item)]
+        elif isinstance(current_value, dict):
+            current_value = current_value[item]
     return current_value
-
-
-def validate_annotations(
-    annotations : Dict[str, Any], 
-    data : Dict[str, Any], 
-    config = None
-) -> bool:
-    """
-    Validates annotations with pydantic library and returns a 
-    ValidationError if data is not valid, otherwise it returns None.
-    """
-    if create_model == None:
-        raise Exception("pydantic has not installed")
-    model = create_model(
-        "custom_validation_model", 
-        __config__ = config,
-        **annotations
-    )
-    try:
-        model(**data)
-    except ValidationError as val:
-        return val

@@ -21,18 +21,17 @@
 # SOFTWARE.
 
 from typing import Any, Optional
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
+from pyconduit2 import Category, block
 import copy
 
 # OBJECT
 # Contains blocks to manage objects.
-class Object(ConduitCategory):
+class Object(Category):
     """
     Contains blocks to manage objects.
     """
 
-    @conduitblock.make
+    @block
     def create_slice(*, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> slice:
         """
         Creates a new slice object and returns it.
@@ -40,7 +39,7 @@ class Object(ConduitCategory):
         return slice(start, stop, step)
 
     
-    @conduitblock.make
+    @block
     def apply_slice(*, value : Any, slice : slice) -> Any:
         """
         Slices a given sequence.
@@ -48,7 +47,7 @@ class Object(ConduitCategory):
         return value[slice]
 
 
-    @conduitblock.make
+    @block
     def slice_value(*, value : Any, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> Any:
         """
         Slices a given sequence.
@@ -57,7 +56,7 @@ class Object(ConduitCategory):
         return value[slice_object]
 
 
-    @conduitblock.make
+    @block
     def copy(*, value : Any) -> Any:
         """
         Shallow copy operation.
@@ -65,7 +64,7 @@ class Object(ConduitCategory):
         return copy.copy(value)
 
     
-    @conduitblock.make
+    @block
     def length(*, value : Any) -> Any:
         """
         Get length of the object.

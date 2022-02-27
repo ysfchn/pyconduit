@@ -20,23 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyconduit.other import EMPTY, ConduitError
+from pyconduit2 import Category, block, Job, ConduitVariable, EMPTY
 from typing import Any, List
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
-from pyconduit.conduit import Conduit
-from pyconduit.enums import ConduitStatus
-from pyconduit.step import ConduitVariable
 
 # VARIABLE
 # Contains blocks to access job variables.
-class Variable(ConduitCategory):
+class Variable(Category):
     """
     Contains blocks to access job variables.
     """
 
-    @conduitblock.make(name = "set")
-    def set_(job__ : Conduit, *, name : str, value : Any = None) -> None:
+    @block(label = "set")
+    def set_(job__ : Job, *, name : str, value : Any = None) -> None:
         """
         Sets a value to variable. If variable doesn't exists, creates new one.
 
@@ -49,8 +44,8 @@ class Variable(ConduitCategory):
         job__.variables[name] = ConduitVariable(value)
 
 
-    @conduitblock.make
-    def create(job__ : Conduit, *, name : str) -> None:
+    @block
+    def create(job__ : Job, *, name : str) -> None:
         """
         Creates a new blank variable, if variable is already exists, doesn't do anything.
 
@@ -66,8 +61,8 @@ class Variable(ConduitCategory):
         job__.variables[name] = ConduitVariable(None)
 
 
-    @conduitblock.make
-    def get(job__ : Conduit, *, name : str, default : Any = EMPTY) -> ConduitVariable:
+    @block
+    def get(job__ : Job, *, name : str, default : Any = EMPTY) -> ConduitVariable:
         """
         Gets the variable by its name. Raises an error if default value hasn't provided and variable doesn't exists.
         
@@ -84,8 +79,8 @@ class Variable(ConduitCategory):
             return job__.variables[name]
 
     
-    @conduitblock.make
-    def delete(job__ : Conduit, *, name : str, silent : bool = True) -> None:
+    @block
+    def delete(job__ : Job, *, name : str, silent : bool = True) -> None:
         """
         Deletes the variable by its name. Raises an error if `silent` flag is set to `False` and variable doesn't exists.
         
@@ -102,24 +97,24 @@ class Variable(ConduitCategory):
             del job__.variables[name]
 
     
-    @conduitblock.make
-    def list_names(job__ : Conduit) -> List[str]:
+    @block
+    def list_names(job__ : Job) -> List[str]:
         """
         Lists the variable names.
         """
         return list(job__.variables.keys())
 
 
-    @conduitblock.make
-    def list_values(job__ : Conduit) -> List[ConduitVariable]:
+    @block
+    def list_values(job__ : Job) -> List[ConduitVariable]:
         """
         Lists the variable values.
         """
         return list(job__.variables.values())
 
     
-    @conduitblock.make
-    def is_exists(job__ : Conduit, *, name : str) -> bool:
+    @block
+    def is_exists(job__ : Job, *, name : str) -> bool:
         """
         Checks if variable exists.
 
@@ -130,8 +125,8 @@ class Variable(ConduitCategory):
         return name in job__.variables
 
     
-    @conduitblock.make
-    def count(job__ : Conduit) -> int:
+    @block
+    def count(job__ : Job) -> int:
         """
         Counts the variables.
         """

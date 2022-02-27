@@ -21,19 +21,16 @@
 # SOFTWARE.
 
 from typing import Any, Dict, List, Union, Tuple
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
-from pyconduit.step import ConduitVariable
-from pyconduit.other import EMPTY
+from pyconduit2 import Category, block, ConduitVariable, EMPTY
 
 # DICTIONARY
 # Contains blocks to work with dictionaries.
-class Dictionary(ConduitCategory):
+class Dictionary(Category):
     """
     Contains blocks to work with dictionaries.
     """
 
-    @conduitblock.make
+    @block
     def create(**kwargs) -> Dict[str, Any]:
         """
         Creates a new dictionary from keyword arguments.
@@ -45,7 +42,7 @@ class Dictionary(ConduitCategory):
         return kwargs
 
 
-    @conduitblock.make
+    @block
     def create_from_pairs(*, key : str, value : Any) -> Dict[str, Any]:
         """
         Creates a new dictionary with one pairs from "key" and "value" parameters.
@@ -59,7 +56,7 @@ class Dictionary(ConduitCategory):
         return {key: value}
 
     
-    @conduitblock.make
+    @block
     def create_from_list(*, pairs : Union[Tuple[str, Any], List[Tuple[str, Any]]]) -> Dict[str, Any]:
         """
         Creates a new dictionary with list of pairs.
@@ -75,7 +72,7 @@ class Dictionary(ConduitCategory):
             return { a[0] : a[1] for a in pairs }
 
 
-    @conduitblock.make
+    @block
     def get(*, key : str, dictionary : Dict[str, Any], default : Any = EMPTY) -> Any:
         """
         Gets a value from dictionary by using key. If value couldn't found and default parameter has specified, returns the default value.
@@ -95,7 +92,7 @@ class Dictionary(ConduitCategory):
             return dictionary[key]
 
 
-    @conduitblock.make(name = "set")
+    @block(label = "set")
     def set_(*, key : str, value : Any, dictionary : Union[Dict[str, Any], ConduitVariable]) -> None:
         """
         Sets a key and value to dictionary. The key doesn't have to exists in the dictionary.
@@ -111,7 +108,7 @@ class Dictionary(ConduitCategory):
         dictionary[key] = value
 
     
-    @conduitblock.make
+    @block
     def delete(*, key : Union[str, None, slice], dictionary : Union[Dict[str, Any], ConduitVariable], silent : bool = True) -> None:
         """
         Deletes a value and key from dictionary by using key or slice object. 
@@ -142,7 +139,7 @@ class Dictionary(ConduitCategory):
                 del dictionary[key]
 
 
-    @conduitblock.make
+    @block
     def merge(*, dict1 : Dict[str, Any], dict2 : Dict[str, Any]) -> Dict[str, Any]:
         """
         Merges two dictionaries and returns a new dictionary. If same keys has provided in both
@@ -157,7 +154,7 @@ class Dictionary(ConduitCategory):
         return { **dict1, **dict2 }
 
     
-    @conduitblock.make
+    @block
     def pop(*, key : str, dictionary : Union[Dict[str, Any], ConduitVariable], default : Any = EMPTY) -> Any:
         """
         If key is in the dictionary, remove it and return its value, else return default. 
@@ -177,7 +174,7 @@ class Dictionary(ConduitCategory):
             return dictionary.pop(key)
 
     
-    @conduitblock.make
+    @block
     def update(*, dict1 : Union[Dict[str, Any], ConduitVariable], dict2 : Union[Dict[str, Any], ConduitVariable]) -> None:
         """
         Updates `dict1` by adding values from `dict2`. It doesn't returns the updated dictionary, instead it updates in place.
@@ -191,7 +188,7 @@ class Dictionary(ConduitCategory):
         dict1.update(dict2)
 
     
-    @conduitblock.make
+    @block
     def clear(*, dictionary : Union[Dict[str, Any], ConduitVariable]) -> None:
         """
         Clears the dictionary.
@@ -203,7 +200,7 @@ class Dictionary(ConduitCategory):
         dictionary.clear()
 
 
-    @conduitblock.make
+    @block
     def count(*, dictionary : Dict[str, Any]) -> int:
         """
         Counts the dictionary keys.
@@ -215,7 +212,7 @@ class Dictionary(ConduitCategory):
         return len(dictionary.keys())
 
 
-    @conduitblock.make
+    @block
     def list_keys(*, dictionary : Dict[str, Any]) -> List[str]:
         """
         Returns a list of keys in the dictionary.
@@ -227,7 +224,7 @@ class Dictionary(ConduitCategory):
         return list(dictionary.keys())
 
 
-    @conduitblock.make
+    @block
     def list_values(*, dictionary : Dict[str, Any]) -> List[Any]:
         """
         Returns a list of values in the dictionary.
@@ -239,7 +236,7 @@ class Dictionary(ConduitCategory):
         return list(dictionary.values())
 
     
-    @conduitblock.make
+    @block
     def list_items(*, dictionary : Dict[str, Any]) -> List[List[Any]]:
         """
         Returns a list of pairs (as key and value list) in the dictionary.
@@ -251,7 +248,7 @@ class Dictionary(ConduitCategory):
         return [[x, y] for x, y in dictionary.items()]
 
 
-    @conduitblock.make
+    @block
     def is_dictionary(*, value : Any) -> bool:
         """
         Tests to see whether the thing given to it is a dictionary or not.
@@ -263,7 +260,7 @@ class Dictionary(ConduitCategory):
         return isinstance(value, dict)
 
 
-    @conduitblock.make
+    @block
     def is_key_exists(*, key : str, dictionary : Dict[str, Any]) -> bool:
         """
         Tests whether the key exists in the dictionary.
@@ -277,7 +274,7 @@ class Dictionary(ConduitCategory):
         return key in dictionary
 
     
-    @conduitblock.make
+    @block
     def is_value_exists(*, value : Any, dictionary : Dict[str, Any]) -> bool:
         """
         Tests whether the value exists in the dictionary.

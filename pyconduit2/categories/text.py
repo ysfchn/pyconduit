@@ -21,17 +21,16 @@
 # SOFTWARE.
 
 from typing import Any, List, Optional
-from pyconduit.category import ConduitCategory
-from pyconduit.category import ConduitBlock as conduitblock
+from pyconduit2 import Category, block
 
 # TEXT
 # Contains blocks to manipulate texts.
-class Text(ConduitCategory):
+class Text(Category):
     """
     Contains blocks to manipulate texts.
     """
 
-    @conduitblock.make
+    @block
     def create(*, value : Any) -> str:
         """
         Convert a value to text.
@@ -43,7 +42,7 @@ class Text(ConduitCategory):
         return str(value)
 
 
-    @conduitblock.make
+    @block
     def join(*, text1 : str, text2 : str, join_with : str = " ") -> str:
         """
         Joins two texts.
@@ -59,7 +58,7 @@ class Text(ConduitCategory):
         return text1 + join_with + text2
 
 
-    @conduitblock.make
+    @block
     def join_list(*, list : List[str], seperator : str = "") -> str:
         """
         Joins all strings in the list.
@@ -73,7 +72,7 @@ class Text(ConduitCategory):
         return seperator.join(list)
 
 
-    @conduitblock.make
+    @block
     def includes(*, text : str, piece : str) -> bool:
         """
         Checks if piece is in the text.
@@ -87,7 +86,7 @@ class Text(ConduitCategory):
         return piece in text
 
     
-    @conduitblock.make
+    @block
     def includes_any(*, text : str, pieces : List[str]) -> bool:
         """
         Checks if one of the pieces in the text.
@@ -103,7 +102,7 @@ class Text(ConduitCategory):
         return any([x in text for x in pieces])
 
     
-    @conduitblock.make
+    @block
     def includes_all(*, text : str, pieces : List[str]) -> bool:
         """
         Checks if all of the pieces in the text.
@@ -119,7 +118,7 @@ class Text(ConduitCategory):
         return all([x in text for x in pieces])
 
 
-    @conduitblock.make
+    @block
     def count(*, text : str) -> int:
         """
         Counts the characters in a string.
@@ -131,7 +130,7 @@ class Text(ConduitCategory):
         return len(text)
 
     
-    @conduitblock.make(name = "get")
+    @block(label = "get")
     def get_(*, text : str, index : int) -> str:
         """
         Gets the character in specified index.
@@ -145,7 +144,7 @@ class Text(ConduitCategory):
         return text[index]
 
     
-    @conduitblock.make
+    @block
     def count_piece(*, text : str, piece : str) -> int:
         """
         Return the number of non-overlapping occurrences of substring in string.
@@ -159,7 +158,7 @@ class Text(ConduitCategory):
         return text.count(piece)
 
 
-    @conduitblock.make
+    @block
     def is_empty(*, text : str, include_spaces : bool = True) -> bool:
         """
         Checks if string is empty.
@@ -177,7 +176,7 @@ class Text(ConduitCategory):
             return len(text.strip()) == 0
 
 
-    @conduitblock.make
+    @block
     def strip(*, text : str, chars : str = None) -> str:
         """
         Return a copy of the string with leading and trailing whitespace removed.
@@ -192,7 +191,7 @@ class Text(ConduitCategory):
         return text.strip(chars)
     
 
-    @conduitblock.make
+    @block
     def uppercase(*, text : str) -> str:
         """
         Return a copy of the string converted to uppercase.
@@ -204,7 +203,7 @@ class Text(ConduitCategory):
         return text.upper()
 
 
-    @conduitblock.make
+    @block
     def lowercase(*, text : str) -> str:
         """
         Return a copy of the string converted to lowercase.
@@ -216,7 +215,7 @@ class Text(ConduitCategory):
         return text.lower()
 
     
-    @conduitblock.make
+    @block
     def split(*, text : str, seperator : str = None, maxsplit : int = -1) -> List[str]:
         """
         Return a list of the words in the string, using "seperator" parameter as the delimiter string.
@@ -232,7 +231,7 @@ class Text(ConduitCategory):
         return text.split(sep = seperator, maxsplit = maxsplit)
 
     
-    @conduitblock.make
+    @block
     def split_lines(*, text : str, keep_ends : bool = False) -> List[str]:
         """
         Return a list of the lines in the string, breaking at line boundaries.
@@ -248,7 +247,7 @@ class Text(ConduitCategory):
         return text.splitlines(keepends = keep_ends)
 
     
-    @conduitblock.make
+    @block
     def split_chars(*, text : str) -> List[str]:
         """
         Return a list of the characters in the string.
@@ -262,7 +261,7 @@ class Text(ConduitCategory):
         return list(text)
 
 
-    @conduitblock.make
+    @block
     def titlecase(*, text : str) -> str:
         """
         Return a version of the string where each word is titlecased.
@@ -275,7 +274,7 @@ class Text(ConduitCategory):
         return text.title()
 
 
-    @conduitblock.make
+    @block
     def starts_with(*, text : str, piece : str) -> bool:
         """
         Return `True` if text starts with the specified piece, `False` otherwise.
@@ -289,7 +288,7 @@ class Text(ConduitCategory):
         return text.startswith(piece)
 
     
-    @conduitblock.make
+    @block
     def ends_with(*, text : str, piece : str) -> bool:
         """
         Return `True` if text ends with the specified piece, `False` otherwise. 
@@ -303,7 +302,7 @@ class Text(ConduitCategory):
         return text.endswith(piece)
 
 
-    @conduitblock.make
+    @block
     def is_numeric(*, text : str) -> bool:
         """
         Return `True` if the string is a numeric string, `False` otherwise.
@@ -316,7 +315,7 @@ class Text(ConduitCategory):
         return text.isnumeric()
 
     
-    @conduitblock.make
+    @block
     def is_alpha(*, text : str) -> bool:
         """
         Return `True` if the string is an alphabetic string, `False` otherwise.
@@ -331,7 +330,7 @@ class Text(ConduitCategory):
         return text.isalpha()
 
 
-    @conduitblock.make
+    @block
     def is_text(*, value : Any) -> bool:
         """
         Return `True` if the thing is a text, `False` otherwise.
@@ -343,7 +342,7 @@ class Text(ConduitCategory):
         return isinstance(value, str)
 
     
-    @conduitblock.make
+    @block
     def replace(*, text : str, old : str, new : str, count : int = -1) -> str:
         """
         Return a copy with all occurrences of substring old replaced by new.
@@ -362,7 +361,7 @@ class Text(ConduitCategory):
         return text.replace(old, new, count)
 
 
-    @conduitblock.make(name = "slice")
+    @block(label = "slice")
     def slice_(*, text : str, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> str:
         """
         Slices a text.

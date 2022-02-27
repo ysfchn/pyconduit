@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 from typing import Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING, get_args, get_origin
-from pyconduit.enums import ConduitStatus
 from pyconduit.base import ConduitVariable, NodeBase, NodeIterator
 from pyconduit.utils import upper, get_key_path
 from pyconduit.function import FunctionProtocol, FunctionStore
@@ -43,11 +42,9 @@ class Node(NodeBase):
         forced : bool = False,
         ctx : Optional[Dict[str, Any]] = None
     ) -> None:
-        self.id = id or None
+        self.id = str(id or self.position)
         self.forced : bool = forced
         self.action : str = upper(action)
-        self.status : ConduitStatus = ConduitStatus.NONE
-        self.return_value : Any = None
         self.parameters : Dict[str, Any] = parameters
         self.condition : Optional[Any] = condition
         self.ctx : Dict[str, Any] = ctx or {}
@@ -59,9 +56,9 @@ class Node(NodeBase):
         return FunctionStore.get(self.action)
 
 
-    def check_if_condition(self) -> bool:
+    def check_if_condition(self, contexts : dict) -> bool:
         if self.condition != None:
-            return self._parse_content_all_bool(self.job._contexts, self.condition)
+            return self._parse_content_all_bool(contexts, self.condition)
         return True
 
 
@@ -84,15 +81,14 @@ class Node(NodeBase):
             "forced": self.forced,
             "ctx": self.ctx,
             "parameters": self.parameters,
-            "condition": self.condition,
-            "nodes": [x.contexts() for x in self.nodes.copy()]
+            "condition": self.condition
         }
 
 
-    def resolve_references(self) -> Dict[str, Any]:
+    def resolve_references(self, contexts : dict) -> Dict[str, Any]:
         params = {}
         for key, value in self.parameters.items():
-            val = self._parse_content_all(self.job.contexts, value)
+            val = self._parse_content_all(contexts, value)
             # Check if Union parameter annotation accepts a ConduitVariable. (i.e Union[ConduitVariable, list])
             if isinstance(val, ConduitVariable) and key in self.block.parameters:
                 is_union = get_origin(self.block.parameters[key].annotation) is Union
@@ -110,14 +106,14 @@ class Node(NodeBase):
             async def run():
                 return await func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references()
+                    **self.resolve_references(self.job._live_contexts)
                 )
             return run
         else:
             def run():
                 return func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references()
+                    **self.resolve_references(self.job._live_contexts)
                 )
             return run
 
@@ -192,10 +188,12 @@ class Node(NodeBase):
         return self._parent
 
     @property
-    def job(self) -> "Job":
-        if self.is_root:
-            return self
-        return self._parent.job
+    def exists(self) -> bool:
+        return self.action in FunctionStore.functions
+
+    @property
+    def path(self) -> str:
+        return self._parent.path + "/" + self.id
 
     def __bool__(self) -> bool:
         return bool(self.nodes)

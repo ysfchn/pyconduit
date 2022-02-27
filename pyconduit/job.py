@@ -60,7 +60,7 @@ class Job(NodeBase):
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._status : Optional[bool] = None
         self._running : bool = False
-        self._contexts : dict = {}
+        self._live_contexts : dict = {}
 
 
     def append_node(self, **kwargs):
@@ -82,68 +82,86 @@ class Job(NodeBase):
             "variables": self.variables,
             "ctx": self.ctx,
             "status": self.status,
-            "parameters": self.local_values,
-            "nodes": [x.contexts() for x in self.nodes.copy()]
+            "parameters": self.local_values
         }
 
-
-    def update_contexts(self) -> None:
-        self._contexts = self.contexts()
+    
+    def _record_result(self, node : Node, result : Any, status : ConduitStatus):
+        self._live_contexts["results"][node.path] = {"value": result, "status": status}
 
 
     async def run(self) -> None:
         failed_step = None
-        self._success = None
-        for node in self.nodes.copy():
-            self.update_contexts()
+        self._status = None
+        self._live_contexts = {"job": self.contexts(), "results": {}, "steps": {}}
+        for node, status in self.walk():
+            self._live_contexts["steps"][node.path] = node.contexts()
             # Refresh the contexts (job parameters).
             # If one of previous steps has failed don't execute the next ones.
-            if self.success == None or node.forced:
+            if self._status == None or node.forced:
                 try:
-                    func = node.get_function()
-                    if not func:
-                        raise ConduitError(ConduitStatus.BLOCK_NOT_FOUND)
-                    if node.status not in [ConduitStatus.DONE, ConduitStatus.NONE]:
-                        raise ConduitError(node.status)
-                    elif not node.check_if_condition():
-                        raise ConduitError(ConduitStatus.IF_CONDITION_FAILED)
+                    if status:
+                        raise ConduitError(status)
                     else:
+                        func = node.get_callable()
                         if inspect.iscoroutine(func):
                             # Execute the function as coroutine.
-                            node.return_value = await func()
+                            self._record_result(
+                                node = node, 
+                                value = await func(), 
+                                status = ConduitStatus.DONE
+                            )
                         else:
                             # Execute the function as it is.
-                            node.return_value = func()
+                            self._record_result(
+                                node = node, 
+                                value = func(), 
+                                status = ConduitStatus.DONE
+                            )
                 except ValueError as vae:
-                    node.status = ConduitStatus.INVALID_ARGUMENT
-                    node.return_value = vae if len(vae.args) != 1 else vae.args[0]
+                    self._record_result(
+                        node = node, 
+                        value = vae if len(vae.args) != 1 else vae.args[0], 
+                        status = ConduitStatus.INVALID_ARGUMENT
+                    )
                 except ValidationError as val:
-                    node.status = ConduitStatus.INVALID_TYPE
-                    node.return_value = val
+                    self._record_result(
+                        node = node, 
+                        value = val, 
+                        status = ConduitStatus.INVALID_TYPE
+                    )
                 except ConduitError as act:
-                    node.status = act.status
-                    node.return_value = act.format_step(node)
+                    self._record_result(
+                        node = node, 
+                        value = act.format_step(node), 
+                        status = act.status
+                    )
                 except Exception as e:
-                    node.status = ConduitStatus.UNHANDLED_EXCEPTION
-                    node.return_value = e
+                    self._record_result(
+                        node = node, 
+                        value = e, 
+                        status = ConduitStatus.UNHANDLED_EXCEPTION
+                    )
                 else:
-                    node.status = ConduitStatus.DONE
-                if node.status not in [ConduitStatus.DONE, ConduitStatus.IF_CONDITION_FAILED]:
+                    pass
+                if self._live_contexts["results"][node.path] not in [ConduitStatus.DONE, ConduitStatus.IF_CONDITION_FAILED]:
                     failed_step = node
-                    self._success = False
+                    self._status = False
             else:
-                node.status = ConduitStatus.SKIPPED
-                node.return_value = ConduitError(node.status).format_step(node)
+                self._record_result(
+                    node = node, 
+                    value = ConduitError(node.status).format_step(node), 
+                    status = ConduitStatus.SKIPPED
+                )
             # Run the listener if exists.
             if self.on_step_update:
                 if inspect.iscoroutinefunction(self.on_step_update):
                     await self.on_step_update(self, node)
                 else:
                     self.on_step_update(self, node)
-        self._steps_iterator = None
         # If there are no any errors in the jobs, set the success to True.
-        if self.success == None:
-            self._success = True
+        if self.status == None:
+            self._status = True
         # Run the listener if exists.
         if self.on_job_finish:
             if inspect.iscoroutinefunction(self.on_job_finish):
@@ -162,6 +180,10 @@ class Job(NodeBase):
     @property
     def running(self) -> bool:
         return self._running
+
+    @property
+    def path(self) -> str:
+        return ""
 
     def __bool__(self) -> bool:
         return bool(self._status)

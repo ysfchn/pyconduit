@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, Dict, Generic, List, Optional, TypeVar, TYPE_CHECKING
+from typing import Any, Dict, Generator, Generic, List, Optional, Tuple, TypeVar, TYPE_CHECKING, Union
 from pyconduit.enums import ConduitStatus
 from pyconduit.function import FunctionStore, FunctionProtocol
 from pyconduit.utils import make_name
@@ -30,6 +30,7 @@ T = TypeVar('T')
 
 if TYPE_CHECKING:
     from pyconduit.node import Node
+    from pyconduit.job import Job
 
 class _Empty:
     pass
@@ -133,9 +134,28 @@ class NodeBase:
     def tree(self) -> List[str]:
         pass
 
+    def walk(self) -> Generator[Tuple["Node", Optional[ConduitStatus]], None, None]:
+        for i in self.nodes.copy():
+            # Check if block really exists.
+            if not i.exists:
+                yield i, ConduitStatus.BLOCK_NOT_FOUND,
+            # Check if condition.
+            if not i.check_if_condition(self.job._live_contexts):
+                yield i, ConduitStatus.IF_CONDITION_FAILED,
+            else:
+                yield i, None,
+                for x, status in i.walk():
+                    yield x, status,
+
     @property
     def is_root(self) -> bool:
         return False
+
+    @property
+    def job(self) -> "Job":
+        if self.is_root:
+            return self
+        return self._parent.job
 
     def __len__(self) -> int:
         return len(self.nodes)

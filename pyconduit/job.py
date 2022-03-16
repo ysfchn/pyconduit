@@ -21,10 +21,9 @@
 # SOFTWARE.
 
 import inspect
-from typing import Callable, Dict, Optional, Union, List, Any
+from typing import Callable, Dict, Optional, Type, Union, List, Any
 from pyconduit.node import Node
-from pyconduit.base import ConduitError, NodeBase, NodeIterator
-from pyconduit.enums import ConduitStatus
+from pyconduit.base import ConduitError, NodeBase, NodeIterator, NodeLike, NodeStatus
 
 try:
     from pydantic import ValidationError
@@ -32,7 +31,7 @@ except (ImportError, ModuleNotFoundError):
     ValidationError = type("ValidationError", (Exception,), {})
 
 
-class Job(NodeBase):
+class Job(NodeBase, NodeLike):
 
     def __init__(
         self,
@@ -60,22 +59,21 @@ class Job(NodeBase):
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._status : Optional[bool] = None
         self._running : bool = False
-        self._live_contexts : dict = {}
+        self._data_steps : dict = {}
+        self._data_results : dict = {}
+        self._data_status : dict = {}
+        self._data_job : dict = {}
 
 
-    def append_node(self, **kwargs):
-        return super()._append_node(Node, **kwargs)
-
-
-    def tree(self) -> List[str]:
+    def tree(self, indent : int = 0) -> List[str]:
         t = []
-        t.append(self.name or "Unnamed Conduit")
-        for k in self.nodes.copy():
-            t.extend(k.tree(2))
+        t.append(repr(self))
+        for k in self.nodes.items:
+            t.extend(k.tree(indent))
         return t
 
 
-    def contexts(self) -> Dict[str, Any]:
+    def get_contexts(self) -> Dict[str, Any]:
         return {
             "id": self.id,
             "name": self.name,
@@ -85,17 +83,30 @@ class Job(NodeBase):
             "parameters": self.local_values
         }
 
-    
-    def _record_result(self, node : Node, result : Any, status : ConduitStatus):
-        self._live_contexts["results"][node.path] = {"value": result, "status": status}
+    def _save_node_result(self, node : Node, value : Any, status : NodeStatus):
+        self._data_results.update({node.path: value})
+        self._data_status.update({node.path: status})
 
+    def _save_node_contexts(self, node : Node):
+        self._data_steps.update({node.path: node.get_contexts()})
+
+    def _save_job_contexts(self):
+        self._data_job.update(self.get_contexts())
+
+    def reset(self):
+        self._status = None
+        self._data_steps.clear()
+        self._data_results.clear()
+        self._data_job.clear()
+        self._data_status.clear()
+        self._save_job_contexts()
 
     async def run(self) -> None:
         failed_step = None
-        self._status = None
-        self._live_contexts = {"job": self.contexts(), "results": {}, "steps": {}}
+        self.reset()
+        self._running = True
         for node, status in self.walk():
-            self._live_contexts["steps"][node.path] = node.contexts()
+            self._save_node_contexts(node)
             # Refresh the contexts (job parameters).
             # If one of previous steps has failed don't execute the next ones.
             if self._status == None or node.forced:
@@ -106,52 +117,56 @@ class Job(NodeBase):
                         func = node.get_callable()
                         if inspect.iscoroutine(func):
                             # Execute the function as coroutine.
-                            self._record_result(
+                            self._save_node_result(
                                 node = node, 
                                 value = await func(), 
-                                status = ConduitStatus.DONE
+                                status = NodeStatus.DONE
                             )
                         else:
                             # Execute the function as it is.
-                            self._record_result(
+                            self._save_node_result(
                                 node = node, 
                                 value = func(), 
-                                status = ConduitStatus.DONE
+                                status = NodeStatus.DONE
                             )
                 except ValueError as vae:
-                    self._record_result(
+                    if self.debug:
+                        raise vae
+                    self._save_node_result(
                         node = node, 
                         value = vae if len(vae.args) != 1 else vae.args[0], 
-                        status = ConduitStatus.INVALID_ARGUMENT
+                        status = NodeStatus.INVALID_ARGUMENT
                     )
                 except ValidationError as val:
-                    self._record_result(
+                    self._save_node_result(
                         node = node, 
                         value = val, 
-                        status = ConduitStatus.INVALID_TYPE
+                        status = NodeStatus.INVALID_TYPE
                     )
                 except ConduitError as act:
-                    self._record_result(
+                    self._save_node_result(
                         node = node, 
                         value = act.format_step(node), 
                         status = act.status
                     )
                 except Exception as e:
-                    self._record_result(
+                    if self.debug:
+                        raise e
+                    self._save_node_result(
                         node = node, 
                         value = e, 
-                        status = ConduitStatus.UNHANDLED_EXCEPTION
+                        status = NodeStatus.UNHANDLED_EXCEPTION
                     )
                 else:
                     pass
-                if self._live_contexts["results"][node.path] not in [ConduitStatus.DONE, ConduitStatus.IF_CONDITION_FAILED]:
+                if node.status not in [NodeStatus.DONE, NodeStatus.IF_CONDITION_FAILED]:
                     failed_step = node
                     self._status = False
             else:
-                self._record_result(
+                self._save_node_result(
                     node = node, 
                     value = ConduitError(node.status).format_step(node), 
-                    status = ConduitStatus.SKIPPED
+                    status = NodeStatus.SKIPPED
                 )
             # Run the listener if exists.
             if self.on_step_update:
@@ -162,6 +177,7 @@ class Job(NodeBase):
         # If there are no any errors in the jobs, set the success to True.
         if self.status == None:
             self._status = True
+        self._running = False
         # Run the listener if exists.
         if self.on_job_finish:
             if inspect.iscoroutinefunction(self.on_job_finish):
@@ -174,6 +190,10 @@ class Job(NodeBase):
         return True
 
     @property
+    def job(self) -> "Job":
+        return self
+
+    @property
     def status(self) -> Optional[bool]:
         return self._status
 
@@ -183,10 +203,21 @@ class Job(NodeBase):
 
     @property
     def path(self) -> str:
-        return ""
+        return "/"
+    
+    @property
+    def contexts(self) -> Dict[str, Any]:
+        return self._data_job
+
+    @property
+    def _node_type(self) -> Type["Node"]:
+        return Node
 
     def __bool__(self) -> bool:
         return bool(self._status)
 
     def __str__(self) -> str:
         return self.name
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} nodes={len(self.nodes)} running={self._running} status={self._status}>"

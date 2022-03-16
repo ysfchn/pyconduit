@@ -26,14 +26,13 @@ __all__ = [
     "Job",
     "Category",
     "ConduitError",
-    "ConduitStatus",
+    "NodeStatus",
     "ConduitVariable",
     "Node",
     "EMPTY"
 ]
 
-from pyconduit.enums import ConduitStatus
-from pyconduit.base import Category, ConduitError, ConduitVariable, EMPTY
+from pyconduit.base import Category, ConduitError, ConduitVariable, EMPTY, NodeStatus
 from pyconduit.function import block, FunctionStore
 from pyconduit.job import Job
 from pyconduit.node import Node

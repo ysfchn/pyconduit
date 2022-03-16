@@ -21,10 +21,13 @@
 # SOFTWARE.
 
 import re
-from typing import Any, Optional, Tuple, Union
+from typing import Any, Optional, Tuple, Union, TYPE_CHECKING
 
 FROM_CHARS = "ıi"
 TO_CHARS   = "II"
+
+if TYPE_CHECKING:
+    from pyconduit.node import Node
 
 
 def upper(text : str) -> str:
@@ -117,4 +120,35 @@ def get_key_path(obj : Union[dict, list, str], key : str) -> Any:
             current_value = current_value[parse_slice(item)]
         elif isinstance(current_value, dict):
             current_value = current_value[item]
+    return current_value
+
+
+def get_node_path(obj : "Node", key : str) -> Any:
+    """
+    Gets a value from Node from list with dotted key path.
+    """
+    current_value = obj
+    is_node = lambda x: current_value.__class__.__name__ == "Node"
+    is_job = lambda x: current_value.__class__.__name__ == "Job"
+    for item in key.split("."):
+        if item.startswith("__") or item.endswith("__") or item.startswith("_") or item.endswith("_"):
+            raise KeyError(item)
+        elif is_node(current_value) and (item == "parent"):
+            current_value = current_value.parent
+        elif is_node(current_value) and (item == "result"):
+            current_value = current_value.return_value
+        elif is_node(current_value) and (item == "status"):
+            current_value = current_value.status
+        elif is_node(current_value) and (item == "path"):
+            current_value = current_value.path
+        elif is_node(current_value) and (item == "parameters"):
+            current_value = current_value.parameters
+        elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
+            current_value = current_value[int(item)]
+        elif isinstance(current_value, (list, str)) and parse_slice(item) != None:
+            current_value = current_value[parse_slice(item)]
+        elif isinstance(current_value, dict):
+            current_value = current_value[item]
+    if is_node(current_value) or is_job(current_value):
+        return repr(current_value)
     return current_value

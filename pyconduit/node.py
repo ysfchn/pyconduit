@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, Callable, Dict, List, Optional, Union, TYPE_CHECKING, get_args, get_origin
-from pyconduit.base import ConduitVariable, NodeBase, NodeIterator
-from pyconduit.utils import upper, get_key_path
+from typing import Any, Callable, Dict, List, Optional, Type, Union, TYPE_CHECKING, get_args, get_origin
+from pyconduit.base import ConduitVariable, NodeBase, NodeIterator, EMPTY, NodeLike, NodeStatus
+from pyconduit.utils import get_node_path, upper, get_key_path
 from pyconduit.function import FunctionProtocol, FunctionStore
 import re
 
@@ -30,7 +30,7 @@ if TYPE_CHECKING:
     from pyconduit.job import Job
 
 
-class Node(NodeBase):
+class Node(NodeBase, NodeLike):
 
     def __init__(
         self,
@@ -40,41 +40,37 @@ class Node(NodeBase):
         condition : Optional[Any] = None, 
         id : Optional[str] = None,
         forced : bool = False,
-        ctx : Optional[Dict[str, Any]] = None
+        ctx : Optional[dict] = None
     ) -> None:
-        self.id = str(id or self.position)
         self.forced : bool = forced
         self.action : str = upper(action)
         self.parameters : Dict[str, Any] = parameters
         self.condition : Optional[Any] = condition
-        self.ctx : Dict[str, Any] = ctx or {}
+        self.ctx : dict = ctx or {}
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._parent = parent
+        self.id = str(id or ((len(self._parent.nodes.items) + 1)))
 
 
     def get_function(self) -> Optional[FunctionProtocol]:
         return FunctionStore.get(self.action)
 
 
-    def check_if_condition(self, contexts : dict) -> bool:
+    def check_if_condition(self) -> bool:
         if self.condition != None:
-            return self._parse_content_all_bool(contexts, self.condition)
+            return self._parse_content_all_bool(self.condition)
         return True
-
-
-    def append_node(self, **kwargs):
-        return super()._append_node(Node, **kwargs)
 
 
     def tree(self, indent : int = 0) -> List[str]:
         t = []
-        t.append(((indent or 0) * " ") + self.action + " #" + str(self.position))
-        for k in self.nodes.copy():
-            t.extend(k.tree((indent or 0) + 2))
+        t.append(((indent or 0) * " ") + repr(self))
+        for k in self.nodes.items:
+            t.extend(k.tree((indent or 0) + (indent or 0)))
         return t
 
 
-    def contexts(self) -> Dict[str, Any]:
+    def get_contexts(self) -> Dict[str, Any]:
         return {
             "action": self.action,
             "id": self.id,
@@ -85,10 +81,10 @@ class Node(NodeBase):
         }
 
 
-    def resolve_references(self, contexts : dict) -> Dict[str, Any]:
+    def resolve_references(self) -> Dict[str, Any]:
         params = {}
         for key, value in self.parameters.items():
-            val = self._parse_content_all(contexts, value)
+            val = self._parse_content_all(value)
             # Check if Union parameter annotation accepts a ConduitVariable. (i.e Union[ConduitVariable, list])
             if isinstance(val, ConduitVariable) and key in self.block.parameters:
                 is_union = get_origin(self.block.parameters[key].annotation) is Union
@@ -106,40 +102,37 @@ class Node(NodeBase):
             async def run():
                 return await func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references(self.job._live_contexts)
+                    **self.resolve_references()
                 )
             return run
         else:
             def run():
                 return func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references(self.job._live_contexts)
+                    **self.resolve_references()
                 )
             return run
 
 
-    @staticmethod
-    def _parse_content_all(data : dict, value : Any) -> Any:
+    def _parse_content_all(self, value : Any) -> Any:
         if isinstance(value, str):
-            return Node._parse_context_string(data, value)
+            return self._parse_context_string(value)
         elif isinstance(value, list):
-            return [Node._parse_content_all(data, x) for x in value]
+            return [self._parse_content_all(x) for x in value]
         elif isinstance(value, dict):
-            return { Node._parse_context_string(data, x) : Node._parse_content_all(data, y) for x, y in value.items() }
+            return { self._parse_context_string(x) : self._parse_content_all(y) for x, y in value.items() }
         return value
 
 
-    @staticmethod
-    def _parse_content_all_bool(data : dict, value : Any) -> bool:
+    def _parse_content_all_bool(self, value : Any) -> bool:
         if isinstance(value, str):
-            return bool(Node._parse_context_string(data, value))
+            return bool(self._parse_context_string(value))
         elif isinstance(value, list):
-            return all([Node._parse_content_all(data, x) for x in value])
+            return all([self._parse_content_all(x) for x in value])
         return bool(value)
 
 
-    @staticmethod
-    def _parse_context_string(data : dict, value : str) -> Any:
+    def _parse_context_string(self, value : str) -> Any:
         # Find all context values in string.
         contexts = re.findall("({[<%#:]{1} [\S]+ [%#:>]{1}})", value)
         # If there is no any context values in string,
@@ -149,35 +142,40 @@ class Node(NodeBase):
         # If value is just a context value, 
         # return the value of the context item instead of a string.
         if len(contexts) == 1 and value.strip() == contexts[0]:
-            return Node._parse_context_tag(data, contexts[0])
+            return self._parse_context_tag(contexts[0])
         else:
             val = value
             for item in contexts:
-                val = Node._parse_context_string(data, val.replace(item, str(Node._parse_context_tag(data, item))))
+                val = self._parse_context_string(val.replace(item, str(self._parse_context_tag(item))))
             return val
 
 
-    @staticmethod
-    def _parse_context_tag(data : dict, value : str) -> Any:
+    def _parse_context_tag(self, value : str) -> Any:
         # Check if value is in "step result" format.
         # {: key :} 
         if value.startswith("{: ") and value.endswith(" :}") and len(value) > 6:
-            step, *keys = Node._parse_context_string(data, value[3:-3]).split(".")
-            return get_key_path(data["steps"], step + ".result" + ("." if keys else "") + ".".join(keys))
+            return get_key_path(self.job._data_results, self._parse_context_string(value[3:-3]))
         # Check if value is in "job variable" format.
         # {# key #}
         elif value.startswith("{# ") and value.endswith(" #}") and len(value) > 6:
-            return get_key_path(data["job"]["variables"], Node._parse_context_string(data, value[3:-3]))
+            return get_key_path(self.job._data_job["variables"], self._parse_context_string(value[3:-3]))
         # Check if value is in "job parameter" format.
         # {< key >}
         elif value.startswith("{< ") and value.endswith(" >}") and len(value) > 6:
-            return get_key_path(data["job"]["parameters"], Node._parse_context_string(data, value[3:-3]))
+            return get_key_path(self.job._data_job["parameters"], self._parse_context_string(value[3:-3]))
         # Check if value is plain key path format.
         # {% key %}
         elif value.startswith("{% ") and value.endswith(" %}") and len(value) > 6:
-            return get_key_path(data, Node._parse_context_string(data, value[3:-3]))
+            return get_node_path(self, self._parse_context_string(value[3:-3]))
         return value
 
+    @property
+    def is_root(self) -> bool:
+        return False
+
+    @property
+    def job(self) -> "Job":
+        return self._parent.job
 
     @property
     def position(self) -> int:
@@ -193,10 +191,29 @@ class Node(NodeBase):
 
     @property
     def path(self) -> str:
-        return self._parent.path + "/" + self.id
+        return self._parent.path.removesuffix("/") + "/" + self.id
+
+    @property
+    def return_value(self) -> Any:
+        return self._parent.job._data_results.get(self.path, EMPTY)
+
+    @property
+    def status(self) -> NodeStatus:
+        return self._parent.job._data_status.get(self.path, NodeStatus.NONE)
+
+    @property
+    def contexts(self) -> Dict[str, Any]:
+        return self._parent.job._data_steps.get(self.path) or {}
+
+    @property
+    def _node_type(self) -> Type["Node"]:
+        return self.__class__
 
     def __bool__(self) -> bool:
         return bool(self.nodes)
 
     def __str__(self) -> str:
         return self.action
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} action={self.action} nodes={len(self.nodes)} id={self.id} path={self.path}>"

@@ -22,7 +22,7 @@
 
 from typing import Any
 from enum import Enum
-from pyconduit import Category, block, ConduitStatus, ConduitError
+from pyconduit import Category, block, NodeStatus, ConduitError
 import operator as op
 
 class LogicalOperators(str, Enum):
@@ -356,7 +356,7 @@ class Logic(Category):
 
         _Added in v1.1_
         """
-        raise ConduitError(ConduitStatus.KILLED_MANUALLY)
+        raise ConduitError(NodeStatus.KILLED_MANUALLY)
 
     
     @block

@@ -4,9 +4,9 @@ When you run the [`Conduit`][pyconduit.conduit.Conduit], all steps will be itera
 
 To run the job you can execute [`Conduit.run()`][pyconduit.conduit.Conduit.run], if you want to execute jobs one by one then you can use `await` keyword, however this will suspend your app until it completes executing all steps.
 
-Before Conduit executes the underlying function, it performs several checks to verify if step has configured correctly (If it has a duplicate ID, if the block doesn't exists and so on.) and changes the status of the step from one of [`ConduitStatus`](#conduitstatus) enum.
+Before Conduit executes the underlying function, it performs several checks to verify if step has configured correctly (If it has a duplicate ID, if the block doesn't exists and so on.) and changes the status of the step from one of [`NodeStatus`](#NodeStatus) enum.
 
-## `ConduitStatus`
+## `NodeStatus`
 
 |    Name    |    Value   |  Is used for raised exceptions in the block? |   Description   |
 |:-----------|:-----------|:-----------:|:----------------|

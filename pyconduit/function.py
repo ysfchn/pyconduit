@@ -25,8 +25,10 @@ __all__ = ["FunctionStore"]
 from functools import partial
 from typing import Coroutine, List, Callable, Any, Dict, Optional, Union, Protocol, runtime_checkable, TYPE_CHECKING
 import inspect
-from pyconduit.node import Node
 from pyconduit.utils import parse_name, make_name, pattern_match
+
+if TYPE_CHECKING:
+    from pyconduit.node import Node
 
 # If pydantic is available, use pydantic's validate arguments function.
 try:
@@ -104,15 +106,15 @@ class FunctionStore:
 
     @classmethod
     def get(cls, display_name : str) -> Optional[FunctionProtocol]:
-        return cls.blocks.get(display_name)
+        return cls.functions.get(display_name)
 
     @classmethod
     def match_first(cls, pattern : str) -> Optional[FunctionProtocol]:
-        return next((v for k, v in cls.blocks.items() if pattern_match(k.display_name, pattern, strict = True)), None)
+        return next((v for k, v in cls.functions.items() if pattern_match(k.display_name, pattern, strict = True)), None)
 
     @classmethod
     def match_all(cls, pattern : str) -> List[FunctionProtocol]:
-        return [v for k, v in cls.blocks.items() if pattern_match(k.display_name, pattern, strict = True)]
+        return [v for k, v in cls.functions.items() if pattern_match(k.display_name, pattern, strict = True)]
 
     @staticmethod
     def block(
@@ -126,9 +128,9 @@ class FunctionStore:
         x.from_function(func = __func)
         __func.conduit = x
         if (x.validate == True) and validate_arguments:
-            __func = validate_arguments(__func)
+            __func = validate_arguments(__func, config = {"arbitrary_types_allowed": True})
         if not x.private:
-            x.blocks[x.display_name] = __func
+            x.functions[x.display_name] = __func
         return __func
 
     @staticmethod
@@ -138,7 +140,7 @@ class FunctionStore:
     def exists_tags(self, tags : List[str]) -> bool:
         return all([x in tags for x in self.tags])
 
-    def prefill_arguments(self, step : Node) -> List[Any]:
+    def prefill_arguments(self, node : "Node") -> List[Any]:
         args = []
         for k, v in self.parameters.items():
             # Check if parameter is positional argument.
@@ -147,13 +149,13 @@ class FunctionStore:
             name = k.replace("__", "")
             # If positional parameter name is "job", pass the job itself.
             if name == "job":
-                args.append(step.job)
-            # If positional parameter name is "step", pass the step.
-            elif name == "step":
-                args.append(step)
+                args.append(node.job)
+            # If positional parameter name is "node", pass the node.
+            elif name == "node":
+                args.append(node)
             # Otherwise, get positional parameter from global values.
             else:
-                args.append(step.job.global_values.get(name))
+                args.append(node.job.global_values.get(name))
         return args
 
     def __bool__(self) -> bool:
@@ -167,11 +169,6 @@ class FunctionStore:
 
 
 block = FunctionStore.block
-
-
-@block(private = True)
-def debug(**kwargs):
-    print(kwargs)
 
 
 if TYPE_CHECKING:

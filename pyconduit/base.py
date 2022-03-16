@@ -20,11 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from typing import Any, Dict, Generator, Generic, List, Optional, Tuple, TypeVar, TYPE_CHECKING, Union
-from pyconduit.enums import ConduitStatus
+from abc import ABC, abstractmethod, abstractproperty
+from typing import Any, Dict, Generator, Generic, List, Optional, Protocol, Tuple, Type, TypeVar, TYPE_CHECKING, Union, runtime_checkable
 from pyconduit.function import FunctionStore, FunctionProtocol
 from pyconduit.utils import make_name
 from wrapt.wrappers import ObjectProxy
+from enum import Enum
 
 T = TypeVar('T')
 
@@ -32,10 +33,34 @@ if TYPE_CHECKING:
     from pyconduit.node import Node
     from pyconduit.job import Job
 
+
 class _Empty:
     pass
 
+
 EMPTY = _Empty()
+
+
+class NodeStatus(Enum):
+    # The step has not executed yet.
+    NONE = -1
+    # Exited without any errors.
+    DONE = 0
+    # This step has skipped because of previous failed steps.
+    SKIPPED = 100
+    # All general unexpected errors.
+    UNHANDLED_EXCEPTION = 101
+    # This action can't found.
+    BLOCK_NOT_FOUND = 102
+    # Pydantic validation errors.
+    INVALID_TYPE = 107
+    # If condition failed.
+    IF_CONDITION_FAILED = 110
+    # Invalid argument has provided for function.
+    INVALID_ARGUMENT = 103
+    # Conduit killed manually.
+    KILLED_MANUALLY = 111
+
 
 class Category:
     @classmethod
@@ -53,7 +78,7 @@ class ConduitVariable(ObjectProxy):
 # A custom exception for errors that occurs in Actions.
 class ConduitError(Exception):
 
-    def __init__(self, status : ConduitStatus, *args): 
+    def __init__(self, status : NodeStatus, *args): 
         self.status = status
         super(ConduitError, self).__init__(status, *args)
 
@@ -86,8 +111,22 @@ class NodeIterator(Generic[T]):
         else:
             self.items.extend(items)
 
+    def remove_item(self, item : T):
+        i = -1
+        try:
+            i = self.items.index(item)
+        except ValueError:
+            return
+        self.items.remove(item)
+        if (self._seen_items >= 1) and (self._seen_items > i):
+            self._seen_items -= 1
+
     def copy(self):
         return NodeIterator(list(self.items))
+
+    def clear(self):
+        self.items.clear()
+        self._seen_items = 0
 
     def __iter__(self):
         return self
@@ -107,55 +146,77 @@ class NodeIterator(Generic[T]):
             raise StopIteration
 
 
-class NodeBase:
+class NodeBase(ABC):
+    @abstractmethod
+    def get_contexts(self) -> Dict[str, Any]:
+        ...
 
-    def _append_node(self, clss, **kwargs):
-        n = clss(parent = self, **kwargs)
+    @abstractmethod
+    def tree(self, indent : int = 0) -> List[str]:
+        ...
+
+    @abstractproperty
+    def path(self) -> str:
+        ...
+
+    @abstractproperty
+    def is_root(self) -> bool:
+        ...
+
+    @abstractproperty
+    def job(self) -> "Job":
+        ...
+
+    @abstractproperty
+    def contexts(self) -> Dict[str, Any]:
+        ...
+
+    @abstractproperty
+    def _node_type(self) -> Type["Node"]:
+        ...
+
+
+@runtime_checkable
+class NodeLikeProtocol(Protocol):
+    nodes : NodeIterator["Node"]
+
+
+class NodeLike(NodeLikeProtocol):
+    def append_node(self, **kwargs) -> "Node":
+        n : "Node" = self._node_type(parent = self, **kwargs)
         self.nodes.add_item(n, add_top = False)
         return n
 
+    def remove_node(self, node : "Node"):
+        self.nodes.remove_item(node)
+
     def get_node_by_id(self, id : str, recursive : bool = False) -> Optional["Node"]:
         if recursive:
-            return next((x.get_node_by_id(id, recursive) for x in self.nodes.copy()), None)
-        return next((x for x in self.nodes.copy() if x.id and (x.id == id)), None)
+            return next((x.get_node_by_id(id, recursive) for x in self.nodes.items), None)
+        return next((x for x in self.nodes.items if x.id and (x.id == id)), None)
 
     def get_nodes_by_action(self, action : str, recursive : bool = False) -> List["Node"]:
         if recursive:
             nodes = []
-            for x in self.nodes.copy():
+            for x in self.nodes.items:
                 nodes.extend(x.get_nodes_by_action(action, recursive))
             return nodes
         else:
-            return [x for x in self.nodes.copy() if (x.action == action)]
+            return [x for x in self.nodes.items if (x.action == action)]
 
-    def contexts(self) -> Dict[str, Any]:
-        pass
-
-    def tree(self) -> List[str]:
-        pass
-
-    def walk(self) -> Generator[Tuple["Node", Optional[ConduitStatus]], None, None]:
-        for i in self.nodes.copy():
+    def walk(self) -> Generator[Tuple["Node", Optional[NodeStatus]], None, None]:
+        self.nodes = self.nodes.copy()
+        for i in self.nodes:
             # Check if block really exists.
             if not i.exists:
-                yield i, ConduitStatus.BLOCK_NOT_FOUND,
+                yield i, NodeStatus.BLOCK_NOT_FOUND,
             # Check if condition.
-            if not i.check_if_condition(self.job._live_contexts):
-                yield i, ConduitStatus.IF_CONDITION_FAILED,
+            elif not i.check_if_condition():
+                yield i, NodeStatus.IF_CONDITION_FAILED,
             else:
                 yield i, None,
                 for x, status in i.walk():
                     yield x, status,
-
-    @property
-    def is_root(self) -> bool:
-        return False
-
-    @property
-    def job(self) -> "Job":
-        if self.is_root:
-            return self
-        return self._parent.job
 
     def __len__(self) -> int:
         return len(self.nodes)

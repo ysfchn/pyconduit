@@ -184,6 +184,11 @@ class NodeLike(NodeLikeProtocol):
     def remove_node(self, node : "Node"):
         self.nodes.remove_item(node)
 
+    def nodes_from_array(self, array : List[Dict]):
+        for n in array:
+            x = self.append_node(**n)
+            x.nodes_from_array(n.get("steps", []))
+
     def get_node_by_id(self, id : str, recursive : bool = False) -> Optional["Node"]:
         if recursive:
             return next((x.get_node_by_id(id, recursive) for x in self.nodes.items), None)

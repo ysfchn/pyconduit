@@ -32,6 +32,7 @@ class Variable(Category):
     """
 
     @block(label = "text.set")
+    @staticmethod
     def set_(job__ : Job, *, name : str, value : Any = None) -> None:
         """
         Sets a value to variable. If variable doesn't exists, creates new one.
@@ -46,6 +47,7 @@ class Variable(Category):
 
 
     @block
+    @staticmethod
     def create(job__ : Job, *, name : str) -> None:
         """
         Creates a new blank variable, if variable is already exists, doesn't do anything.
@@ -63,6 +65,7 @@ class Variable(Category):
 
 
     @block
+    @staticmethod
     def get(job__ : Job, *, name : str, default : Any = EMPTY) -> Var:
         """
         Gets the variable by its name. Raises an error if default value hasn't provided and variable doesn't exists.
@@ -81,6 +84,7 @@ class Variable(Category):
 
     
     @block
+    @staticmethod
     def delete(job__ : Job, *, name : str, silent : bool = True) -> None:
         """
         Deletes the variable by its name. Raises an error if `silent` flag is set to `False` and variable doesn't exists.
@@ -99,6 +103,7 @@ class Variable(Category):
 
     
     @block
+    @staticmethod
     def list_names(job__ : Job) -> List[str]:
         """
         Lists the variable names.
@@ -107,6 +112,7 @@ class Variable(Category):
 
 
     @block
+    @staticmethod
     def list_values(job__ : Job) -> List[Var]:
         """
         Lists the variable values.
@@ -115,6 +121,7 @@ class Variable(Category):
 
     
     @block
+    @staticmethod
     def is_exists(job__ : Job, *, name : str) -> bool:
         """
         Checks if variable exists.
@@ -127,6 +134,7 @@ class Variable(Category):
 
     
     @block
+    @staticmethod
     def count(job__ : Job) -> int:
         """
         Counts the variables.

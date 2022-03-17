@@ -32,9 +32,10 @@ if TYPE_CHECKING:
 
 # If pydantic is available, use pydantic's validate arguments function.
 try:
-    from pydantic import validate_arguments
+    from pydantic import create_model, BaseConfig
 except (ImportError, ModuleNotFoundError):
-    validate_arguments = None
+    create_model = None
+    BaseConfig = None
 
 
 @runtime_checkable
@@ -62,7 +63,8 @@ class FunctionStore:
         "_parameters",
         "_is_coroutine",
         "_doc",
-        "_populated"
+        "_populated",
+        "_model"
     )
 
     def __init__(
@@ -82,24 +84,30 @@ class FunctionStore:
         self.tags : List[str] = tags
         self.doc : Optional[str] = doc
         self.validate : bool = validate
-        self.ctx : Optional[dict] = ctx
+        self.ctx : dict = ctx or {}
         # Populated when function has provided.
         self._return_type : Optional[Any] = None
         self._parameters : Optional[Dict[str, inspect.Parameter]] = None
         self._is_coroutine : Optional[bool] = None
         self._doc : Optional[str] = None
         self._populated : bool = False
+        self._model : Any = None
 
     def from_function(self, func : Union[Callable, Coroutine]):
         self._populated = True
         # Get function's docstring if not providen.
-        self._doc = self.doc or inspect.getdoc(func)
+        self._doc = self.doc or inspect.getdoc(self.get_wrapped(func))
         # Get function's return type.
-        self._return_type = inspect.signature(func).return_annotation
+        self._return_type = inspect.signature(self.get_wrapped(func)).return_annotation
         # Get function's parameters.
-        self._parameters = inspect.signature(func).parameters
+        self._parameters = dict(inspect.signature(self.get_wrapped(func)).parameters)
         # Check if function is coroutine.
-        self._is_coroutine = inspect.iscoroutinefunction(func)
+        self._is_coroutine = inspect.iscoroutinefunction(self.get_wrapped(func))
+        self._model = self.to_model(
+            arbitrary_types_allowed = True,
+            extra = "ignore"
+        )
+
 
     @property
     def display_name(self) -> str:
@@ -116,6 +124,10 @@ class FunctionStore:
     @property
     def is_coroutine(self) -> bool:
         return self._is_coroutine
+
+    @property
+    def is_validated(self):
+        return bool(self._model)
 
     @property
     def description(self) -> Optional[str]:
@@ -141,11 +153,10 @@ class FunctionStore:
     ) -> Function:
         if not __func:
             return partial(FunctionStore.block, **kwargs)
-        x = FunctionStore(label = kwargs.pop("label", __func.__qualname__), **kwargs)
+        name = getattr(__func, "__func__", __func).__qualname__
+        x = FunctionStore(label = (kwargs.pop("label", None) or name), **kwargs)
         x.from_function(func = __func)
         __func.conduit = x
-        if (x.validate == True) and validate_arguments:
-            __func = validate_arguments(__func, config = {"arbitrary_types_allowed": True})
         if not x.private:
             x.functions[x.display_name] = __func
         return __func
@@ -153,6 +164,30 @@ class FunctionStore:
     @staticmethod
     def is_block(__func : Callable):
         return hasattr(__func, "conduit") and isinstance(__func.conduit, FunctionStore)
+
+    @staticmethod
+    def get_wrapped(__func : Callable):
+        return getattr(__func, "__func__", __func)
+
+    def to_model(self, **kwargs):
+        if not create_model:
+            return
+        if not self._parameters:
+            return
+        m = {}
+        for k, v in self._parameters.items():
+            if v.kind not in [inspect.Parameter.KEYWORD_ONLY, inspect.Parameter.VAR_KEYWORD, inspect.Parameter.POSITIONAL_OR_KEYWORD]:
+                continue
+            m[k] = (
+                Any if v.annotation == inspect._empty else v.annotation, 
+                ... if v.default == inspect._empty else v.default,
+            )
+        return create_model("FunctionValidate", __config__ = type("Config", (BaseConfig, ), kwargs), **m)
+
+    def validate_params(self, **kwargs):
+        if not self.is_validated:
+            return
+        self._model(**kwargs)
 
     def exists_tags(self, tags : List[str]) -> bool:
         return all([x in tags for x in self.tags])

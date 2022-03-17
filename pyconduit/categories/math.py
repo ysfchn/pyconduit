@@ -37,6 +37,7 @@ class Math(Category):
     """
 
     @block
+    @staticmethod
     def create_integer(*, value : Any) -> int:
         """
         Convert a value to an integer.
@@ -49,6 +50,7 @@ class Math(Category):
 
     
     @block
+    @staticmethod
     def create_float(*, value : Any) -> float:
         """
         Convert a value to a float.
@@ -61,6 +63,7 @@ class Math(Category):
 
 
     @block(label = "math.sum")
+    @staticmethod
     def sum_(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the sum of two numbers.
@@ -75,6 +78,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def sum_list(*, list : List[Any], start : Union[int, float] = 0) -> Union[int, float]:
         """
         Return the sum of a 'start' value (default: 0) plus an list of numbers.
@@ -88,6 +92,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def sub(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the subtraction of two numbers.
@@ -102,6 +107,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def div(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the division of two numbers.
@@ -116,6 +122,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def mul(*, value1 : SAFE_NUMBER, value2 : SAFE_NUMBER) -> Union[int, float]:
         """
         Return the multiplication of two numbers.
@@ -130,6 +137,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def exp(*, value1 : confloat(le = 50), value2 : confloat(le = 50)) -> Union[int, float]:
         """
         Returns the value of x to the power of y.
@@ -144,6 +152,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def mod(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Performs a division and then returns the remainder of the division.
@@ -158,6 +167,7 @@ class Math(Category):
 
     
     @block
+    @staticmethod
     def floor(*, value : Union[int, float]) -> int:
         """
         Returns the greatest integer that's less than or equal to the given number.
@@ -170,6 +180,7 @@ class Math(Category):
 
     
     @block
+    @staticmethod
     def ceiling(*, value : Union[int, float]) -> int:
         """
         Returns the smallest integer that's greater than or equal to the given number.
@@ -182,6 +193,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def random(*, value1 : SAFE_NUMBER, value2 : SAFE_NUMBER) -> int:
         """
         Returns a random integer from between value1 and value2 (including both numbers).
@@ -196,6 +208,7 @@ class Math(Category):
 
 
     @block(label = "math.max")
+    @staticmethod
     def max_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the largest value from two values.
@@ -210,6 +223,7 @@ class Math(Category):
 
     
     @block
+    @staticmethod
     def sqrt(*, value : Union[int, float]) -> Union[int, float]:
         """
         Returns the square root of the given number.
@@ -222,6 +236,7 @@ class Math(Category):
 
     
     @block(label = "math.abs")
+    @staticmethod
     def abs_(*, value : Any) -> Any:
         """
         Return the absolute value of the argument.
@@ -234,6 +249,7 @@ class Math(Category):
 
 
     @block
+    @staticmethod
     def max_list(*, list : List[Any]) -> Any:
         """
         Return the largest value from a list.
@@ -246,6 +262,7 @@ class Math(Category):
 
 
     @block(label = "math.min")
+    @staticmethod
     def min_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the smallest value from two items.
@@ -260,6 +277,7 @@ class Math(Category):
     
 
     @block
+    @staticmethod
     def min_list(*, list : List[Any]) -> Any:
         """
         Return the smallest value from a list.

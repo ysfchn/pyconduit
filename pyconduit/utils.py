@@ -46,15 +46,18 @@ def make_name(name : str, category : Optional[str] = None) -> str:
         raise ValueError("Name or category can't contain (.) dots.")
     if not category:
         return upper(name)
-    return ".".join([upper(name), upper(category)])
+    return ".".join([upper(category), upper(name)])
 
 
 def parse_name(value : str) -> Tuple[str, Optional[str]]:
     """
     Parse category and name from a display name. 
     """
-    name, *category = upper(value).split(".", 1)
-    return (name, "".join(category) or None, )
+    if value.count(".") > 0:
+        category, *name = upper(value).split(".", 1)
+        return ("".join(name), category, )
+    else:
+        return (upper(value), None)
 
 
 def pattern_match(item : str, pattern : str, strict : bool = True) -> bool:

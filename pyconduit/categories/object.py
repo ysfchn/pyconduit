@@ -32,6 +32,7 @@ class Object(Category):
     """
 
     @block
+    @staticmethod
     def create_slice(*, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> slice:
         """
         Creates a new slice object and returns it.
@@ -40,6 +41,7 @@ class Object(Category):
 
     
     @block
+    @staticmethod
     def apply_slice(*, value : Any, slice : slice) -> Any:
         """
         Slices a given sequence.
@@ -48,6 +50,7 @@ class Object(Category):
 
 
     @block
+    @staticmethod
     def slice_value(*, value : Any, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> Any:
         """
         Slices a given sequence.
@@ -57,6 +60,7 @@ class Object(Category):
 
 
     @block
+    @staticmethod
     def copy(*, value : Any) -> Any:
         """
         Shallow copy operation.
@@ -65,6 +69,7 @@ class Object(Category):
 
     
     @block
+    @staticmethod
     def length(*, value : Any) -> Any:
         """
         Get length of the object.

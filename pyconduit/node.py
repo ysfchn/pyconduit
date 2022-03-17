@@ -59,7 +59,7 @@ class Node(NodeBase, NodeLike):
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._parent = parent
         self.id = str(id or ((len(self._parent.nodes.items) + 1)))
-        self.ctx = ctx
+        self.ctx = ctx or {}
 
 
     def get_function(self) -> Optional[FunctionProtocol]:
@@ -109,16 +109,20 @@ class Node(NodeBase, NodeLike):
         func = self.get_function()
         if func.conduit.is_coroutine:
             async def run():
+                r = self.resolve_references()
+                func.conduit.validate_params(**r)
                 return await func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references()
+                    **r
                 )
             return run
         else:
             def run():
+                r = self.resolve_references()
+                func.conduit.validate_params(**r)
                 return func(
                     *func.conduit.prefill_arguments(self), 
-                    **self.resolve_references()
+                    **r
                 )
             return run
 
@@ -219,8 +223,8 @@ class Node(NodeBase, NodeLike):
         return self.__class__
 
     @property
-    def ctx(self) -> Optional[dict]:
-        return self._parent.job._data_context.get(self.path)
+    def ctx(self) -> dict:
+        return self._parent.job._data_context.get(self.path, {})
 
     @ctx.setter
     def ctx(self, value) -> None:

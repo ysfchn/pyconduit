@@ -23,7 +23,7 @@
 import inspect
 from typing import Callable, Dict, Optional, Type, Union, List, Any
 from pyconduit.node import Node
-from pyconduit.base import NodeError, NodeBase, NodeIterator, NodeLike, NodeStatus
+from pyconduit.base import NodeError, NodeBase, NodeIterator, NodeLike, NodeStatus, Variable
 
 try:
     from pydantic import ValidationError
@@ -69,14 +69,14 @@ class Job(NodeBase, NodeLike):
     ) -> None:
         self.id = id
         self.name = name
-        self.variables = variables or {}
+        self.variables = {x : Variable(y) for x, y in variables or {}}
         self.local_values = local_values or {}
         self.global_values = global_values or {}
         self.on_step_update = on_step_update
         self.on_job_finish = on_job_finish
         self.block_limit_overrides = block_limit_overrides or {}
         self.debug = debug
-        self.ctx : Optional[dict] = ctx
+        self.ctx : dict = ctx or {}
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._status : Optional[bool] = None
         self._running : bool = False

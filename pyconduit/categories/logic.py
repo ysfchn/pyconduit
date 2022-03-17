@@ -54,6 +54,7 @@ class Logic(Category):
     """
 
     @block(label = "logic.bool")
+    @staticmethod
     def bool_(*, value : Any) -> bool:
         """
         Returns the value as bool.
@@ -66,6 +67,7 @@ class Logic(Category):
 
 
     @block(label = "logic.if")
+    @staticmethod
     def if_(*, value1 : Any, value2 : Any, operator : LogicalOperators) -> bool:
         """
         Performs a classic "IF" condition and returns the result.
@@ -92,6 +94,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def is_truth(*, value : Any) -> bool:
         """
         Checks if value is truthy.
@@ -107,6 +110,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def is_none(*, value : Any) -> bool:
         """
         Checks if value is equals to `None`.
@@ -119,6 +123,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def true() -> bool:
         """
         Returns logical `True`.
@@ -127,6 +132,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def false() -> bool:
         """
         Returns logical `False`.
@@ -135,6 +141,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def none() -> None:
         """
         Returns `None`.
@@ -143,6 +150,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def if_then_else(*, value : Any, then : Any, otherwise : Any) -> Any:
         """
         Checks if `value` is a truthy value or not. If it is a truthy value, then it returns `then` parameter,
@@ -163,6 +171,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def logical_not(*, value : Any) -> bool:
         """
         Performs logical negation, returning false if the input is true, and true if the input is false.
@@ -175,6 +184,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def logical_or(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical OR operation, returns true if one of the inputs are true, if all inputs are false, then it returns false.
@@ -189,6 +199,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def logical_and(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical AND operation, returns true if all inputs are true, otherwise it returns false.
@@ -203,6 +214,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def logical_nor(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical NOR operation, returns true if all inputs are false, otherwise false.
@@ -219,6 +231,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def logical_nand(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical NAND operation, returns true if any input is false, otherwise it returns false.
@@ -235,6 +248,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def logical_xor(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical XOR operation, returns true if both value not equals in boolean context, otherwise it returns false.
@@ -251,6 +265,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def logical_xnor(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs logical XNOR (aka XAND) operation, returns true if both value equals in boolean context, otherwise it returns false.
@@ -267,6 +282,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def bitwise_not(*, value : Any) -> Any:
         """
         Performs bitwise NOT operation.
@@ -279,6 +295,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def bitwise_or(*, value1 : Any, value2 : Any) -> Any:
         """
         Performs bitwise OR operation.
@@ -293,6 +310,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def bitwise_and(*, value1 : Any, value2 : Any) -> Any:
         """
         Performs bitwise AND operation.
@@ -307,6 +325,7 @@ class Logic(Category):
 
 
     @block
+    @staticmethod
     def bitwise_xor(*, value1 : Any, value2 : Any) -> bool:
         """
         Performs bitwise XOR operation, returns true if only a single value returns true, otherwise it returns false.
@@ -323,6 +342,7 @@ class Logic(Category):
 
     
     @block(label = "logic.assert")
+    @staticmethod
     def assert_(*, value : Any) -> None:
         """
         Raises an error if value is not truthy. Useful if you want to force the value to be truthy.
@@ -337,6 +357,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def not_assert(*, value : Any) -> None:
         """
         Raises an error if value is truthy. Useful if you want to force the value to be not truthy.
@@ -351,6 +372,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def stop() -> None:
         """
         Stops the current working workflow.
@@ -361,6 +383,7 @@ class Logic(Category):
 
     
     @block
+    @staticmethod
     def if_assert(*, value1 : Any, value2 : Any, operator : LogicalOperators) -> None:
         """
         Performs a classic "IF" condition. And raises an error if check is `False`. 

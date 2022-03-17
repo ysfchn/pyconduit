@@ -31,6 +31,7 @@ class Dictionary(Category):
     """
 
     @block
+    @staticmethod
     def create(**kwargs) -> Dict[str, Any]:
         """
         Creates a new dictionary from keyword arguments.
@@ -43,6 +44,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def create_from_pairs(*, key : str, value : Any) -> Dict[str, Any]:
         """
         Creates a new dictionary with one pairs from "key" and "value" parameters.
@@ -57,6 +59,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def create_from_list(*, pairs : Union[Tuple[str, Any], List[Tuple[str, Any]]]) -> Dict[str, Any]:
         """
         Creates a new dictionary with list of pairs.
@@ -73,6 +76,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def get(*, key : str, dictionary : Dict[str, Any], default : Any = EMPTY) -> Any:
         """
         Gets a value from dictionary by using key. If value couldn't found and default parameter has specified, returns the default value.
@@ -93,6 +97,7 @@ class Dictionary(Category):
 
 
     @block(label = "dictionary.set")
+    @staticmethod
     def set_(*, key : str, value : Any, dictionary : Union[Dict[str, Any], Variable]) -> None:
         """
         Sets a key and value to dictionary. The key doesn't have to exists in the dictionary.
@@ -109,6 +114,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def delete(*, key : Union[str, None, slice], dictionary : Union[Dict[str, Any], Variable], silent : bool = True) -> None:
         """
         Deletes a value and key from dictionary by using key or slice object. 
@@ -140,6 +146,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def merge(*, dict1 : Dict[str, Any], dict2 : Dict[str, Any]) -> Dict[str, Any]:
         """
         Merges two dictionaries and returns a new dictionary. If same keys has provided in both
@@ -155,6 +162,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def pop(*, key : str, dictionary : Union[Dict[str, Any], Variable], default : Any = EMPTY) -> Any:
         """
         If key is in the dictionary, remove it and return its value, else return default. 
@@ -175,6 +183,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def update(*, dict1 : Union[Dict[str, Any], Variable], dict2 : Union[Dict[str, Any], Variable]) -> None:
         """
         Updates `dict1` by adding values from `dict2`. It doesn't returns the updated dictionary, instead it updates in place.
@@ -189,6 +198,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def clear(*, dictionary : Union[Dict[str, Any], Variable]) -> None:
         """
         Clears the dictionary.
@@ -201,6 +211,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def count(*, dictionary : Dict[str, Any]) -> int:
         """
         Counts the dictionary keys.
@@ -213,6 +224,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def list_keys(*, dictionary : Dict[str, Any]) -> List[str]:
         """
         Returns a list of keys in the dictionary.
@@ -225,6 +237,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def list_values(*, dictionary : Dict[str, Any]) -> List[Any]:
         """
         Returns a list of values in the dictionary.
@@ -237,6 +250,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def list_items(*, dictionary : Dict[str, Any]) -> List[List[Any]]:
         """
         Returns a list of pairs (as key and value list) in the dictionary.
@@ -249,6 +263,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def is_dictionary(*, value : Any) -> bool:
         """
         Tests to see whether the thing given to it is a dictionary or not.
@@ -261,6 +276,7 @@ class Dictionary(Category):
 
 
     @block
+    @staticmethod
     def is_key_exists(*, key : str, dictionary : Dict[str, Any]) -> bool:
         """
         Tests whether the key exists in the dictionary.
@@ -275,6 +291,7 @@ class Dictionary(Category):
 
     
     @block
+    @staticmethod
     def is_value_exists(*, value : Any, dictionary : Dict[str, Any]) -> bool:
         """
         Tests whether the value exists in the dictionary.

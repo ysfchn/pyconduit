@@ -33,6 +33,7 @@ class Lists(Category):
     """
 
     @block
+    @staticmethod
     def create(*, value1 : Any = EMPTY, value2 : Any = EMPTY) -> List[Any]:
         """
         Creates a new list with items. If items are not provided, then returns an empty list.
@@ -47,6 +48,7 @@ class Lists(Category):
 
 
     @block(label = "lists.range")
+    @staticmethod
     def _range(*, stop : conint(le = 1000) = None, start : Optional[conint(le = 1000)] = None, step : Optional[conint(le = 1000)] = None) -> List[int]:
         """
         Creates a list with numbers from start, stop and step.
@@ -66,6 +68,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def count(*, list : Union[List[Any], Variable]) -> int:
         """
         Counts the elements in a list.
@@ -78,6 +81,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def append(*, item : Any, list : Union[List[Any], Variable]) -> None:
         """
         Add item to the end of the list.
@@ -92,6 +96,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def includes(*, item : Any, list : Union[List[Any], Variable]) -> bool:
         """
         Checks if item in the list.
@@ -108,6 +113,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def includes_any(*, items : Union[List[Any], Variable], list : Union[List[Any], Variable]) -> bool:
         """
         Checks if one of the items in the list.
@@ -124,6 +130,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def includes_all(*, items : Union[List[Any], Variable], list : Union[List[Any], Variable]) -> bool:
         """
         Checks if all of the items in the list.
@@ -140,6 +147,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def clear(*, list : Union[List[Any], Variable]) -> None:
         """
         Remove all items from list.
@@ -152,6 +160,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def extend(*, list1 : Union[List[Any], Variable], list2 : Union[List[Any], Variable]) -> None:
         """
         Extend list by appending elements from the `list2`. `list2` will not be modified but `list1` will be.
@@ -166,6 +175,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def sort(*, list : Union[List[Any], Variable], reverse : bool = False) -> None:
         """
         Sort list in place.
@@ -180,6 +190,7 @@ class Lists(Category):
     
 
     @block
+    @staticmethod
     def insert(*, list : Union[List[Any], Variable], index : int, item : Any) -> None:
         """
         Insert object before index.
@@ -196,6 +207,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def copy(*, list : Union[List[Any], Variable]) -> List[Any]:
         """
         Return a shallow copy of the list.
@@ -208,6 +220,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def remove(*, item : Any, list : Union[List[Any], Variable]) -> None:
         """
         Remove a item from list.
@@ -222,6 +235,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def pop(*, list : Union[List[Any], Variable], index : Optional[int] = None) -> Any:
         """
         Remove and return item at index (default last).
@@ -236,6 +250,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def reverse(*, list : Union[List[Any], Variable]) -> None:
         """
         Reverses the list in place.
@@ -248,6 +263,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def count_item(*, item : Any, list : Union[List[Any], Variable]) -> List[Any]:
         """
         Return number of occurrences of value.
@@ -262,6 +278,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def merge(*, list1 : Union[List[Any], Variable], list2 : Union[List[Any], Variable]) -> List[Any]:
         """
         Merge the two lists.
@@ -276,6 +293,7 @@ class Lists(Category):
 
 
     @block
+    @staticmethod
     def flatten(*, values : Union[List[Any], Variable]) -> List[Any]:
         """
         Moves the inner lists' items to the root of the list. Only one depth is supported.
@@ -294,6 +312,7 @@ class Lists(Category):
 
 
     @block
+    @staticmethod
     def get(*, list : Union[List[Any], Variable], index : int) -> Any:
         """
         Return the item in the position.
@@ -308,6 +327,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def random(*, list : Union[List[Any], Variable]) -> Any:
         """
         Gets a random item from the list. 
@@ -325,6 +345,7 @@ class Lists(Category):
 
     
     @block
+    @staticmethod
     def index(*, list : Union[List[Any], Variable], item : Any) -> int:
         """
         Return the index of the item. Returns -1 if item is not found.

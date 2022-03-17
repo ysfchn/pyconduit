@@ -32,6 +32,7 @@ class Text(Category):
     """
 
     @block
+    @staticmethod
     def create(*, value : Any) -> str:
         """
         Convert a value to text.
@@ -44,6 +45,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def join(*, text1 : str, text2 : str, join_with : str = " ") -> str:
         """
         Joins two texts.
@@ -60,6 +62,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def join_list(*, list : List[str], seperator : str = "") -> str:
         """
         Joins all strings in the list.
@@ -74,6 +77,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def includes(*, text : str, piece : str) -> bool:
         """
         Checks if piece is in the text.
@@ -88,6 +92,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def includes_any(*, text : str, pieces : List[str]) -> bool:
         """
         Checks if one of the pieces in the text.
@@ -104,6 +109,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def includes_all(*, text : str, pieces : List[str]) -> bool:
         """
         Checks if all of the pieces in the text.
@@ -120,6 +126,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def count(*, text : str) -> int:
         """
         Counts the characters in a string.
@@ -132,6 +139,7 @@ class Text(Category):
 
     
     @block(label = "text.get")
+    @staticmethod
     def get_(*, text : str, index : int) -> str:
         """
         Gets the character in specified index.
@@ -146,6 +154,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def count_piece(*, text : str, piece : str) -> int:
         """
         Return the number of non-overlapping occurrences of substring in string.
@@ -160,6 +169,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def is_empty(*, text : str, include_spaces : bool = True) -> bool:
         """
         Checks if string is empty.
@@ -178,6 +188,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def strip(*, text : str, chars : str = None) -> str:
         """
         Return a copy of the string with leading and trailing whitespace removed.
@@ -193,6 +204,7 @@ class Text(Category):
     
 
     @block
+    @staticmethod
     def uppercase(*, text : str) -> str:
         """
         Return a copy of the string converted to uppercase.
@@ -205,6 +217,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def lowercase(*, text : str) -> str:
         """
         Return a copy of the string converted to lowercase.
@@ -217,6 +230,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def split(*, text : str, seperator : str = None, maxsplit : int = -1) -> List[str]:
         """
         Return a list of the words in the string, using "seperator" parameter as the delimiter string.
@@ -233,6 +247,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def split_lines(*, text : str, keep_ends : bool = False) -> List[str]:
         """
         Return a list of the lines in the string, breaking at line boundaries.
@@ -249,6 +264,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def split_chars(*, text : str) -> List[str]:
         """
         Return a list of the characters in the string.
@@ -263,6 +279,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def titlecase(*, text : str) -> str:
         """
         Return a version of the string where each word is titlecased.
@@ -276,6 +293,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def starts_with(*, text : str, piece : str) -> bool:
         """
         Return `True` if text starts with the specified piece, `False` otherwise.
@@ -290,6 +308,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def ends_with(*, text : str, piece : str) -> bool:
         """
         Return `True` if text ends with the specified piece, `False` otherwise. 
@@ -304,6 +323,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def repeat(*, text : str, count : conint(le = 1000)) -> str:
         """
         Repeats a text for specified (count) times.
@@ -318,6 +338,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def is_numeric(*, text : str) -> bool:
         """
         Return `True` if the string is a numeric string, `False` otherwise.
@@ -331,6 +352,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def is_alpha(*, text : str) -> bool:
         """
         Return `True` if the string is an alphabetic string, `False` otherwise.
@@ -346,6 +368,7 @@ class Text(Category):
 
 
     @block
+    @staticmethod
     def is_text(*, value : Any) -> bool:
         """
         Return `True` if the thing is a text, `False` otherwise.
@@ -358,6 +381,7 @@ class Text(Category):
 
     
     @block
+    @staticmethod
     def replace(*, text : str, old : str, new : str, count : int = -1) -> str:
         """
         Return a copy with all occurrences of substring old replaced by new.
@@ -377,6 +401,7 @@ class Text(Category):
 
 
     @block(label = "text.slice")
+    @staticmethod
     def slice_(*, text : str, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> str:
         """
         Slices a text.

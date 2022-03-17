@@ -25,14 +25,14 @@ __all__ = [
     "FunctionStore",
     "Job",
     "Category",
-    "ConduitError",
+    "NodeError",
     "NodeStatus",
-    "ConduitVariable",
+    "Variable",
     "Node",
     "EMPTY"
 ]
 
-from pyconduit.base import Category, ConduitError, ConduitVariable, EMPTY, NodeStatus
+from pyconduit.base import Category, NodeError, Variable, EMPTY, NodeStatus
 from pyconduit.function import block, FunctionStore
 from pyconduit.job import Job
 from pyconduit.node import Node

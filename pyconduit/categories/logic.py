@@ -22,7 +22,7 @@
 
 from typing import Any
 from enum import Enum
-from pyconduit import Category, block, NodeStatus, ConduitError
+from pyconduit import Category, block, NodeStatus, NodeError
 import operator as op
 
 class LogicalOperators(str, Enum):
@@ -35,6 +35,17 @@ class LogicalOperators(str, Enum):
     IS = "is"
     IS_NOT = "is not"
 
+OPERATORS = {
+    LogicalOperators.EQUALS: op.eq,
+    LogicalOperators.NOT_EQUALS: op.ne,
+    LogicalOperators.GREATER_THAN: op.gt,
+    LogicalOperators.GREATER_THAN_OR_EQUALS: op.ge,
+    LogicalOperators.LESS_THAN: op.lt,
+    LogicalOperators.LESS_THAN_OR_EQUALS: op.le,
+    LogicalOperators.IS: op.is_,
+    LogicalOperators.IS_NOT: op.is_not
+}
+
 # LOGIC
 # Contains blocks to work with conditions and logic values.
 class Logic(Category):
@@ -42,7 +53,7 @@ class Logic(Category):
     Contains blocks to work with conditions and logic values.
     """
 
-    @block(label = "bool")
+    @block(label = "logic.bool")
     def bool_(*, value : Any) -> bool:
         """
         Returns the value as bool.
@@ -54,7 +65,7 @@ class Logic(Category):
         return bool(value)
 
 
-    @block(label = "if")
+    @block(label = "logic.if")
     def if_(*, value1 : Any, value2 : Any, operator : LogicalOperators) -> bool:
         """
         Performs a classic "IF" condition and returns the result.
@@ -77,17 +88,7 @@ class Logic(Category):
                 "is not" (is not)
                 ```
         """
-        _operators = {
-            LogicalOperators.EQUALS: op.eq,
-            LogicalOperators.NOT_EQUALS: op.ne,
-            LogicalOperators.GREATER_THAN: op.gt,
-            LogicalOperators.GREATER_THAN_OR_EQUALS: op.ge,
-            LogicalOperators.LESS_THAN: op.lt,
-            LogicalOperators.LESS_THAN_OR_EQUALS: op.le,
-            LogicalOperators.IS: op.is_,
-            LogicalOperators.IS_NOT: op.is_not
-        }
-        return _operators[operator](value1, value2)
+        return OPERATORS[operator](value1, value2)
 
 
     @block
@@ -321,7 +322,7 @@ class Logic(Category):
         return value1 ^ value2
 
     
-    @block(label = "assert")
+    @block(label = "logic.assert")
     def assert_(*, value : Any) -> None:
         """
         Raises an error if value is not truthy. Useful if you want to force the value to be truthy.
@@ -356,7 +357,7 @@ class Logic(Category):
 
         _Added in v1.1_
         """
-        raise ConduitError(NodeStatus.KILLED_MANUALLY)
+        raise NodeError(NodeStatus.KILLED_MANUALLY)
 
     
     @block
@@ -383,16 +384,6 @@ class Logic(Category):
                 "is not" (is not)
                 ```
         """
-        _operators = {
-            LogicalOperators.EQUALS: op.eq,
-            LogicalOperators.NOT_EQUALS: op.ne,
-            LogicalOperators.GREATER_THAN: op.gt,
-            LogicalOperators.GREATER_THAN_OR_EQUALS: op.ge,
-            LogicalOperators.LESS_THAN: op.lt,
-            LogicalOperators.LESS_THAN_OR_EQUALS: op.le,
-            LogicalOperators.IS: op.is_,
-            LogicalOperators.IS_NOT: op.is_not
-        }
-        if _operators[operator](value1, value2):
+        if OPERATORS[operator](value1, value2):
             return
         raise ValueError((value1, value2, ))

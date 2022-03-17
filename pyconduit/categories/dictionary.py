@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, Dict, List, Union, Tuple
-from pyconduit import Category, block, ConduitVariable, EMPTY
+from pyconduit import Category, block, Variable, EMPTY
 
 # DICTIONARY
 # Contains blocks to work with dictionaries.
@@ -92,8 +92,8 @@ class Dictionary(Category):
             return dictionary[key]
 
 
-    @block(label = "set")
-    def set_(*, key : str, value : Any, dictionary : Union[Dict[str, Any], ConduitVariable]) -> None:
+    @block(label = "dictionary.set")
+    def set_(*, key : str, value : Any, dictionary : Union[Dict[str, Any], Variable]) -> None:
         """
         Sets a key and value to dictionary. The key doesn't have to exists in the dictionary.
 
@@ -109,7 +109,7 @@ class Dictionary(Category):
 
     
     @block
-    def delete(*, key : Union[str, None, slice], dictionary : Union[Dict[str, Any], ConduitVariable], silent : bool = True) -> None:
+    def delete(*, key : Union[str, None, slice], dictionary : Union[Dict[str, Any], Variable], silent : bool = True) -> None:
         """
         Deletes a value and key from dictionary by using key or slice object. 
         If value couldn't found and `silent` parameter has set to `False`, it will raise an error.
@@ -155,7 +155,7 @@ class Dictionary(Category):
 
     
     @block
-    def pop(*, key : str, dictionary : Union[Dict[str, Any], ConduitVariable], default : Any = EMPTY) -> Any:
+    def pop(*, key : str, dictionary : Union[Dict[str, Any], Variable], default : Any = EMPTY) -> Any:
         """
         If key is in the dictionary, remove it and return its value, else return default. 
         If default is not given and key is not in the dictionary, an error is raised.
@@ -175,7 +175,7 @@ class Dictionary(Category):
 
     
     @block
-    def update(*, dict1 : Union[Dict[str, Any], ConduitVariable], dict2 : Union[Dict[str, Any], ConduitVariable]) -> None:
+    def update(*, dict1 : Union[Dict[str, Any], Variable], dict2 : Union[Dict[str, Any], Variable]) -> None:
         """
         Updates `dict1` by adding values from `dict2`. It doesn't returns the updated dictionary, instead it updates in place.
 
@@ -189,7 +189,7 @@ class Dictionary(Category):
 
     
     @block
-    def clear(*, dictionary : Union[Dict[str, Any], ConduitVariable]) -> None:
+    def clear(*, dictionary : Union[Dict[str, Any], Variable]) -> None:
         """
         Clears the dictionary.
 

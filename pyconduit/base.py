@@ -71,28 +71,22 @@ class Category:
         return self.__class__.__name__
 
 
-class ConduitVariable(ObjectProxy):
+class Variable(ObjectProxy):
     pass
 
 
-# A custom exception for errors that occurs in Actions.
-class ConduitError(Exception):
-
+# A custom exception for errors that occurs in nodes.
+class NodeError(Exception):
     def __init__(self, status : NodeStatus, *args): 
         self.status = status
-        super(ConduitError, self).__init__(status, *args)
-
-    @property
-    def text(self) -> str:
-        return f"{self.status.name} ({self.status.value})"
-
-    def format_step(self, step : "Node"):
-        return \
-            self.text + "\n" + \
-            step.action
+        super(NodeError, self).__init__(status, *args)
 
 
 class NodeIterator(Generic[T]):
+    __slots__ = (
+        "items",
+        "_seen_items"
+    )
 
     def __init__(self, items : Optional[List[T]] = None):
         self.items = items or []

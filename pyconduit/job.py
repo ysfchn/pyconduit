@@ -23,7 +23,7 @@
 import inspect
 from typing import Callable, Dict, Optional, Type, Union, List, Any
 from pyconduit.node import Node
-from pyconduit.base import ConduitError, NodeBase, NodeIterator, NodeLike, NodeStatus
+from pyconduit.base import NodeError, NodeBase, NodeIterator, NodeLike, NodeStatus
 
 try:
     from pydantic import ValidationError
@@ -32,6 +32,27 @@ except (ImportError, ModuleNotFoundError):
 
 
 class Job(NodeBase, NodeLike):
+
+    __slots__ = (
+        "id",
+        "name",
+        "variables",
+        "local_values",
+        "global_values",
+        "on_step_update",
+        "on_job_finish",
+        "block_limit_overrides",
+        "debug",
+        "ctx",
+        "nodes",
+        "_status",
+        "_running",
+        "_data_steps",
+        "_data_results",
+        "_data_status",
+        "_data_job",
+        "_data_context"
+    )
 
     def __init__(
         self,
@@ -55,7 +76,7 @@ class Job(NodeBase, NodeLike):
         self.on_job_finish = on_job_finish
         self.block_limit_overrides = block_limit_overrides or {}
         self.debug = debug
-        self.ctx = ctx or {}
+        self.ctx : Optional[dict] = ctx
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._status : Optional[bool] = None
         self._running : bool = False
@@ -63,6 +84,7 @@ class Job(NodeBase, NodeLike):
         self._data_results : dict = {}
         self._data_status : dict = {}
         self._data_job : dict = {}
+        self._data_context : dict = {}
 
 
     def tree(self, indent : int = 0) -> List[str]:
@@ -112,7 +134,7 @@ class Job(NodeBase, NodeLike):
             if self._status == None or node.forced:
                 try:
                     if status:
-                        raise ConduitError(status)
+                        raise NodeError(status)
                     else:
                         func = node.get_callable()
                         if inspect.iscoroutine(func):
@@ -143,10 +165,10 @@ class Job(NodeBase, NodeLike):
                         value = val, 
                         status = NodeStatus.INVALID_TYPE
                     )
-                except ConduitError as act:
+                except NodeError as act:
                     self._save_node_result(
                         node = node, 
-                        value = act.format_step(node), 
+                        value = act, 
                         status = act.status
                     )
                 except Exception as e:
@@ -165,7 +187,7 @@ class Job(NodeBase, NodeLike):
             else:
                 self._save_node_result(
                     node = node, 
-                    value = ConduitError(node.status).format_step(node), 
+                    value = NodeError(node.status), 
                     status = NodeStatus.SKIPPED
                 )
             # Run the listener if exists.

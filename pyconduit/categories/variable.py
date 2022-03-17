@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pyconduit import Category, block, Job, ConduitVariable, EMPTY
+from pyconduit import Category, block, Job, EMPTY
+from pyconduit import Variable as Var
 from typing import Any, List
 
 # VARIABLE
@@ -30,7 +31,7 @@ class Variable(Category):
     Contains blocks to access job variables.
     """
 
-    @block(label = "set")
+    @block(label = "text.set")
     def set_(job__ : Job, *, name : str, value : Any = None) -> None:
         """
         Sets a value to variable. If variable doesn't exists, creates new one.
@@ -41,7 +42,7 @@ class Variable(Category):
             value:
                 Value of the variable.
         """
-        job__.variables[name] = ConduitVariable(value)
+        job__.variables[name] = Var(value)
 
 
     @block
@@ -58,11 +59,11 @@ class Variable(Category):
         """
         if name in job__.variables:
             return
-        job__.variables[name] = ConduitVariable(None)
+        job__.variables[name] = Var(None)
 
 
     @block
-    def get(job__ : Job, *, name : str, default : Any = EMPTY) -> ConduitVariable:
+    def get(job__ : Job, *, name : str, default : Any = EMPTY) -> Var:
         """
         Gets the variable by its name. Raises an error if default value hasn't provided and variable doesn't exists.
         
@@ -106,7 +107,7 @@ class Variable(Category):
 
 
     @block
-    def list_values(job__ : Job) -> List[ConduitVariable]:
+    def list_values(job__ : Job) -> List[Var]:
         """
         Lists the variable values.
         """

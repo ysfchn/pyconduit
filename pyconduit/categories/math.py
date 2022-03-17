@@ -20,11 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import random
 from typing import Any, List, Union
 from pyconduit import Category, block
 import math
-from pydantic import confloat
+from pydantic import confloat, conint
 import operator as op
+
+SAFE_NUMBER = Union[confloat(le = 10000), conint(le = 10000)]
 
 # MATH
 # Contains blocks to interact with numbers.
@@ -57,7 +60,7 @@ class Math(Category):
         return float(value)
 
 
-    @block(label = "sum")
+    @block(label = "math.sum")
     def sum_(*, value1 : Union[int, float], value2 : Union[int, float]) -> Union[int, float]:
         """
         Return the sum of two numbers.
@@ -113,7 +116,7 @@ class Math(Category):
 
 
     @block
-    def mul(*, value1 : confloat(le = 1000), value2 : confloat(le = 1000)) -> Union[int, float]:
+    def mul(*, value1 : SAFE_NUMBER, value2 : SAFE_NUMBER) -> Union[int, float]:
         """
         Return the multiplication of two numbers.
 
@@ -127,7 +130,7 @@ class Math(Category):
 
 
     @block
-    def exp(*, value1 : confloat(le = 10), value2 : confloat(le = 10)) -> Union[int, float]:
+    def exp(*, value1 : confloat(le = 50), value2 : confloat(le = 50)) -> Union[int, float]:
         """
         Returns the value of x to the power of y.
 
@@ -178,7 +181,21 @@ class Math(Category):
         return math.ceil(value)
 
 
-    @block(label = "max")
+    @block
+    def random(*, value1 : SAFE_NUMBER, value2 : SAFE_NUMBER) -> int:
+        """
+        Returns a random integer from between value1 and value2 (including both numbers).
+
+        Args:
+            value1:
+                A number.
+            value2:
+                A number.
+        """
+        return random.randint(value1, value2)
+
+
+    @block(label = "math.max")
     def max_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the largest value from two values.
@@ -204,7 +221,7 @@ class Math(Category):
         return math.sqrt(value)
 
     
-    @block(label = "abs")
+    @block(label = "math.abs")
     def abs_(*, value : Any) -> Any:
         """
         Return the absolute value of the argument.
@@ -228,7 +245,7 @@ class Math(Category):
         return max(list)
 
 
-    @block(label = "min")
+    @block(label = "math.min")
     def min_(*, value1 : Any, value2 : Any) -> Any:
         """
         Return the smallest value from two items.

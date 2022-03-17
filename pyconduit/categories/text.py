@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, List, Optional
+from pydantic import conint
 from pyconduit import Category, block
 
 # TEXT
@@ -130,7 +131,7 @@ class Text(Category):
         return len(text)
 
     
-    @block(label = "get")
+    @block(label = "text.get")
     def get_(*, text : str, index : int) -> str:
         """
         Gets the character in specified index.
@@ -303,6 +304,20 @@ class Text(Category):
 
 
     @block
+    def repeat(*, text : str, count : conint(le = 1000)) -> str:
+        """
+        Repeats a text for specified (count) times.
+
+        Args:
+            text:
+                The text that will be used in the operation.
+            count:
+                Count to repeat.
+        """
+        return text * count
+
+
+    @block
     def is_numeric(*, text : str) -> bool:
         """
         Return `True` if the string is a numeric string, `False` otherwise.
@@ -361,7 +376,7 @@ class Text(Category):
         return text.replace(old, new, count)
 
 
-    @block(label = "slice")
+    @block(label = "text.slice")
     def slice_(*, text : str, stop : Optional[int] = None, start : Optional[int] = None, step : Optional[int] = None) -> str:
         """
         Slices a text.

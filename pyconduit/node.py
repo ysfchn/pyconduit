@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from typing import Any, Callable, Dict, List, Optional, Type, Union, TYPE_CHECKING, get_args, get_origin
-from pyconduit.base import ConduitVariable, NodeBase, NodeIterator, EMPTY, NodeLike, NodeStatus
+from pyconduit.base import Variable, NodeBase, NodeIterator, EMPTY, NodeLike, NodeStatus
 from pyconduit.utils import get_node_path, upper, get_key_path
 from pyconduit.function import FunctionProtocol, FunctionStore
 import re
@@ -31,6 +31,16 @@ if TYPE_CHECKING:
 
 
 class Node(NodeBase, NodeLike):
+
+    __slots__ = (
+        "forced",
+        "action",
+        "parameters",
+        "condition",
+        "nodes",
+        "_parent",
+        "id"
+    )
 
     def __init__(
         self,
@@ -46,10 +56,10 @@ class Node(NodeBase, NodeLike):
         self.action : str = upper(action)
         self.parameters : Dict[str, Any] = parameters
         self.condition : Optional[Any] = condition
-        self.ctx : dict = ctx or {}
         self.nodes : NodeIterator[Node] = NodeIterator()
         self._parent = parent
         self.id = str(id or ((len(self._parent.nodes.items) + 1)))
+        self.ctx = ctx
 
 
     def get_function(self) -> Optional[FunctionProtocol]:
@@ -85,11 +95,10 @@ class Node(NodeBase, NodeLike):
         params = {}
         for key, value in self.parameters.items():
             val = self._parse_content_all(value)
-            # Check if Union parameter annotation accepts a ConduitVariable. (i.e Union[ConduitVariable, list])
-            if isinstance(val, ConduitVariable) and key in self.block.parameters:
-                is_union = get_origin(self.block.parameters[key].annotation) is Union
-                is_variable_accepted = False if not is_union else ConduitVariable in get_args(self.block.parameters[key].annotation)
-                if not is_variable_accepted:
+            # Check if parameter annotation accepts a Variable. (i.e Union[Variable, list]),
+            # if not, then get the actual value of the variable, instead of using the proxy object.
+            if isinstance(val, Variable) and (key in self.block.parameters):
+                if Variable.__name__ not in str(self.block.parameters[key].annotation):
                     val = val.__wrapped__
             # Save to params.
             params[key] = val
@@ -208,6 +217,14 @@ class Node(NodeBase, NodeLike):
     @property
     def _node_type(self) -> Type["Node"]:
         return self.__class__
+
+    @property
+    def ctx(self) -> Optional[dict]:
+        return self._parent.job._data_context.get(self.path)
+
+    @ctx.setter
+    def ctx(self, value) -> None:
+        self._parent.job._data_context[self.path] = value
 
     def __bool__(self) -> bool:
         return bool(self.nodes)

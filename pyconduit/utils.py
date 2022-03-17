@@ -143,6 +143,8 @@ def get_node_path(obj : "Node", key : str) -> Any:
             current_value = current_value.path
         elif is_node(current_value) and (item == "parameters"):
             current_value = current_value.parameters
+        elif (is_node(current_value) or is_job(current_value)) and (item == "ctx"):
+            current_value = current_value.ctx
         elif isinstance(current_value, (list, str)) and item.isnumeric() and int(item) < len(current_value):
             current_value = current_value[int(item)]
         elif isinstance(current_value, (list, str)) and parse_slice(item) != None:

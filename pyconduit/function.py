@@ -48,6 +48,23 @@ class FunctionStore:
 
     functions : Dict[str, FunctionProtocol] = {}
 
+    __slots__ = (
+        "label",
+        "_name",
+        "_category",
+        "max_uses",
+        "private",
+        "tags",
+        "doc",
+        "validate",
+        "ctx",
+        "_return_type",
+        "_parameters",
+        "_is_coroutine",
+        "_doc",
+        "_populated"
+    )
+
     def __init__(
         self,
         label : str,
@@ -65,7 +82,7 @@ class FunctionStore:
         self.tags : List[str] = tags
         self.doc : Optional[str] = doc
         self.validate : bool = validate
-        self.ctx : dict = ctx or {}
+        self.ctx : Optional[dict] = ctx
         # Populated when function has provided.
         self._return_type : Optional[Any] = None
         self._parameters : Optional[Dict[str, inspect.Parameter]] = None

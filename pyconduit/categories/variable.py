@@ -31,7 +31,7 @@ class Variable(Category):
     Contains blocks to access job variables.
     """
 
-    @block(label = "text.set")
+    @block(label = "variable.set")
     @staticmethod
     def set_(job__ : Job, *, name : str, value : Any = None) -> None:
         """
